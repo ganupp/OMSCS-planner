@@ -16,6 +16,24 @@ export class CoursesCrawler extends BaseCrawler {
         this.URL = url || '';
     }
 
+    private static parseCourseLine(rawText: string): { id: string; name: string; isFoundational: boolean } {
+        const normalized = BaseCrawler.normalizeText(rawText.replace(/\u00A0/g, ' '));
+        const parts = normalized.split(/:\s*/, 2);
+        let id = (parts[0] || '').replace(/\*/g, '').trim();
+        const isFoundational = /\*/.test(parts[0] || '');
+        let name = (parts[1] || '').trim();
+
+        if (!name && id) {
+            const tokens = id.split(/\s+/);
+            if (tokens.length > 2) {
+                name = tokens.slice(2).join(' ');
+                id = tokens.slice(0, 2).join(' ');
+            }
+        }
+
+        return { id, name, isFoundational };
+    }
+
     parseHTML(html: string): Course[] {
         const $ = cheerio.load(html);
 
@@ -23,16 +41,9 @@ export class CoursesCrawler extends BaseCrawler {
         const courses = $(selector)
             .map((_: any, el: any) => {
                 const li = $(el);
-                const rawText = li.text().trim();
-
-                const parts = rawText.split(':', 2);
-                let id = (parts[0] || '').trim();
-                const name = (parts[1] || '').trim();
-
-                const isFoundational = id.includes('*');
-                if (isFoundational) {
-                    id = id.replace('*', '').trim();
-                }
+                const rawText = li.text();
+                const { id, name, isFoundational } = CoursesCrawler.parseCourseLine(rawText);
+                if (!id || !name) return null;
 
                 const firstLink = li.find('a').first();
                 const href = firstLink.length ? firstLink.attr('href') || null : null;
@@ -44,7 +55,8 @@ export class CoursesCrawler extends BaseCrawler {
 
                 return course;
             })
-            .get();
+            .get()
+            .filter((item: Course | null): item is Course => item !== null);
 
         return courses;
     }
@@ -52,7 +64,6 @@ export class CoursesCrawler extends BaseCrawler {
     async fetchCurrentCourses(): Promise<Course[]> {
         return await this.crawl(this.URL) as Course[];
     }
-
 }
 
 export default CoursesCrawler;

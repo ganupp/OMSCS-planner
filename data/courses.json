@@ -59,13 +59,13 @@
   },
   {
     "id": "CS 6263",
-    "name": "Intro to Cyber Physical Systems Security (formerly CS 8803 O07)",
+    "name": "Intro to Cyber Physical Systems Security (formerly CS 8803 O07)",
     "link": "/cs-6263-intro-cyber-physical-systems-security",
     "isFoundational": true
   },
   {
     "id": "CS 6264",
-    "name": "Information Security Lab - System and Network DefensesC (formerly CS 8803 O11)",
+    "name": "Information Security Lab - System and Network DefensesC (formerly CS 8803 O11)",
     "link": "/cs-6264-information-security-lab-system-and-network-defenses",
     "isFoundational": true
   },
@@ -160,7 +160,7 @@
   },
   {
     "id": "CS 6515",
-    "name": "Intro to Graduate Algorithms (formerly CS 8803 GA)",
+    "name": "Intro to Graduate Algorithms (formerly CS 8803 GA)",
     "link": "/cs-6515-intro-graduate-algorithms",
     "isFoundational": true
   },
@@ -255,7 +255,7 @@
   },
   {
     "id": "CS 7639",
-    "name": "Cyber-Physical Design and Analysis (formerly CS 8803 O09)",
+    "name": "Cyber-Physical Design and Analysis (formerly CS 8803 O09)",
     "link": "/cs-7639-cyber-physical-design-and-analysis",
     "isFoundational": true
   },

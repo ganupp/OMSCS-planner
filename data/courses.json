@@ -1,0 +1,427 @@
+[
+  {
+    "id": "CS 6035",
+    "name": "Introduction to Information Security",
+    "link": "/cs-6035-introduction-information-security",
+    "isFoundational": true
+  },
+  {
+    "id": "CS 6150",
+    "name": "Computing for Good",
+    "link": "/cs-6150-computing-good"
+  },
+  {
+    "id": "CS 6200",
+    "name": "Introduction to Operating Systems (formerly CS 8803 O02)",
+    "link": "/cs-6200-introduction-operating-systems",
+    "isFoundational": true
+  },
+  {
+    "id": "CS 6210",
+    "name": "Advanced Operating Systems",
+    "link": "/cs-6210-advanced-operating-systems",
+    "isFoundational": true
+  },
+  {
+    "id": "CS 6211",
+    "name": "System Design for Cloud Computing (formerly CS 8803 O12)",
+    "link": "/cs-6211-system-design-cloud-computing",
+    "isFoundational": true
+  },
+  {
+    "id": "CS 6238",
+    "name": "Secure Computer SystemsC",
+    "link": "/cs-6238-secure-computer-systems",
+    "isFoundational": true
+  },
+  {
+    "id": "CS 6250",
+    "name": "Computer NetworksC",
+    "link": "/cs-6250-computer-networks",
+    "isFoundational": true
+  },
+  {
+    "id": "CS 6260",
+    "name": "Applied CryptographyC",
+    "link": "/cs-6260-applied-cryptography",
+    "isFoundational": true
+  },
+  {
+    "id": "CS 6261",
+    "name": "Security Incident ResponseC (formerly CS 8803 O22)",
+    "link": "/cs-6261-security-incident-response"
+  },
+  {
+    "id": "CS 6262",
+    "name": "Network Security",
+    "link": "/cs-6262-network-security",
+    "isFoundational": true
+  },
+  {
+    "id": "CS 6263",
+    "name": "Intro to Cyber Physical Systems Security (formerly CS 8803 O07)",
+    "link": "/cs-6263-intro-cyber-physical-systems-security",
+    "isFoundational": true
+  },
+  {
+    "id": "CS 6264",
+    "name": "Information Security Lab - System and Network DefensesC (formerly CS 8803 O11)",
+    "link": "/cs-6264-information-security-lab-system-and-network-defenses",
+    "isFoundational": true
+  },
+  {
+    "id": "CS 6265",
+    "name": "Information Security LabC",
+    "link": "/cs-6265-information-security-lab"
+  },
+  {
+    "id": "CS 6290",
+    "name": "High Performance Computer Architecture",
+    "link": "/cs-6290-high-performance-computer-architecture",
+    "isFoundational": true
+  },
+  {
+    "id": "CS 6291",
+    "name": "Embedded Systems Optimization (formerly CS 8803 O04)",
+    "link": "/cs-6291-embedded-systems-optimization",
+    "isFoundational": true
+  },
+  {
+    "id": "CS 6300",
+    "name": "Software Development Process",
+    "link": "/cs-6300-software-development-process",
+    "isFoundational": true
+  },
+  {
+    "id": "CS 6310",
+    "name": "Software Architecture and Design",
+    "link": "/cs-6310-software-architecture-and-design",
+    "isFoundational": true
+  },
+  {
+    "id": "CS 6340",
+    "name": "Software Analysis",
+    "link": "/cs-6340-software-analysis",
+    "isFoundational": true
+  },
+  {
+    "id": "CS 6400",
+    "name": "Database Systems Concepts and Design",
+    "link": "/cs-6400-database-systems-concepts-and-design",
+    "isFoundational": true
+  },
+  {
+    "id": "CS 6422",
+    "name": "Database System Implementation",
+    "link": "/cs-6422-database-system-implementation",
+    "isFoundational": true
+  },
+  {
+    "id": "CS 6435",
+    "name": "Digital Health Equity (formerly CS 8803 O16)",
+    "link": "/cs-6435-digital-health-equity",
+    "isFoundational": true
+  },
+  {
+    "id": "CS 6440",
+    "name": "Intro to Health Informatics",
+    "link": "/cs-6440-intro-health-informatics",
+    "isFoundational": true
+  },
+  {
+    "id": "CS 6457",
+    "name": "Video Game Design",
+    "link": "/cs-6457-video-game-design",
+    "isFoundational": true
+  },
+  {
+    "id": "CS 6460",
+    "name": "Educational Technology",
+    "link": "/cs-6460-educational-technology",
+    "isFoundational": true
+  },
+  {
+    "id": "CS 6475",
+    "name": "Computational Photography",
+    "link": "/cs-6475-computational-photography",
+    "isFoundational": true
+  },
+  {
+    "id": "CS 6476",
+    "name": "Computer Vision",
+    "link": "/cs-6476-computer-vision",
+    "isFoundational": true
+  },
+  {
+    "id": "CS 6491",
+    "name": "Foundations of Computer Graphics",
+    "link": "/cs-6491-foundations-computer-graphics",
+    "isFoundational": true
+  },
+  {
+    "id": "CS 6515",
+    "name": "Intro to Graduate Algorithms (formerly CS 8803 GA)",
+    "link": "/cs-6515-intro-graduate-algorithms",
+    "isFoundational": true
+  },
+  {
+    "id": "CS 6601",
+    "name": "Artificial Intelligence",
+    "link": "/cs-6601-artificial-intelligence",
+    "isFoundational": true
+  },
+  {
+    "id": "CS 6603",
+    "name": "AI, Ethics, and Society (formerly CS 8803 O10)",
+    "link": "/cs-6603-ai-ethics-and-society",
+    "isFoundational": true
+  },
+  {
+    "id": "CS 6675",
+    "name": "Advanced Internet Systems and Applications",
+    "link": "/cs-6675-advanced-internet-systems-and-applications",
+    "isFoundational": true
+  },
+  {
+    "id": "CS 6747",
+    "name": "Advanced Malware AnalysisC (formerly CS 8813)",
+    "link": "/cs-6747-advanced-malware-analysis"
+  },
+  {
+    "id": "CS 6750",
+    "name": "Human-Computer Interaction",
+    "link": "/cs-6750-human-computer-interaction",
+    "isFoundational": true
+  },
+  {
+    "id": "CS 6795",
+    "name": "Introduction to Cognitive Science",
+    "link": "/cs-6795-introduction-cognitive-science",
+    "isFoundational": true
+  },
+  {
+    "id": "CS 7210",
+    "name": "Distributed Computing",
+    "link": "/cs-7210-distributed-computing",
+    "isFoundational": true
+  },
+  {
+    "id": "CS 7280",
+    "name": "Network Science",
+    "link": "/cs-7280-network-science",
+    "isFoundational": true
+  },
+  {
+    "id": "CS 7295",
+    "name": "GPU Hardware and Software (formerly CS 8803 O21)",
+    "link": "/cs-7295-gpu-hardware-and-software",
+    "isFoundational": true
+  },
+  {
+    "id": "CS 7400",
+    "name": "Quantum Computing (formerly CS 8803 O13)",
+    "link": "/cs-7400-quantum-computing",
+    "isFoundational": true
+  },
+  {
+    "id": "CS 7470",
+    "name": "Mobile & Ubiquitous Computing",
+    "link": "/cs-7470-mobile-ubiquitous-computing",
+    "isFoundational": true
+  },
+  {
+    "id": "CS 7496",
+    "name": "Computer Animation",
+    "link": "/cs-7496-computer-animation",
+    "isFoundational": true
+  },
+  {
+    "id": "CS 7632",
+    "name": "Game AI",
+    "link": "/cs-7632-game-ai",
+    "isFoundational": true
+  },
+  {
+    "id": "CS 7637",
+    "name": "Knowledge-Based Artificial Intelligence - Cognitive Systems",
+    "link": "/cs-7637-knowledge-based-artificial-intelligence-cognitive-systems",
+    "isFoundational": true
+  },
+  {
+    "id": "CS 7638",
+    "name": "Robotics",
+    "link": "/cs-7638-robotics-ai-techniques",
+    "isFoundational": true
+  },
+  {
+    "id": "CS 7639",
+    "name": "Cyber-Physical Design and Analysis (formerly CS 8803 O09)",
+    "link": "/cs-7639-cyber-physical-design-and-analysis",
+    "isFoundational": true
+  },
+  {
+    "id": "CS 7641",
+    "name": "Machine Learning",
+    "link": "/cs-7641-machine-learning",
+    "isFoundational": true
+  },
+  {
+    "id": "CS 7642",
+    "name": "Reinforcement Learning (formerly CS 8803 O03)",
+    "link": "/cs-7642-reinforcement-learning",
+    "isFoundational": true
+  },
+  {
+    "id": "CS 7643",
+    "name": "Deep Learning",
+    "link": "/cs-7643-deep-learning",
+    "isFoundational": true
+  },
+  {
+    "id": "CS 7646",
+    "name": "Machine Learning for Trading",
+    "link": "/cs-7646-machine-learning-trading",
+    "isFoundational": true
+  },
+  {
+    "id": "CS 7650",
+    "name": "Natural Language Processing",
+    "link": "/cs-7650-natural-language-processing",
+    "isFoundational": true
+  },
+  {
+    "id": "CS 8803 O08",
+    "name": "Compilers - Theory and Practice",
+    "link": "/cs-8803-o08-compilers-theory-and-practice",
+    "isFoundational": true
+  },
+  {
+    "id": "CS 8803 O15",
+    "name": "Introduction to Computer Law",
+    "link": "/cs-8803-o15-introduction-computer-law"
+  },
+  {
+    "id": "CS 8803 O17",
+    "name": "Global Entrepreneurship",
+    "link": "/cs-8803-o17-global-entrepreneurship"
+  },
+  {
+    "id": "CS 8803 O20",
+    "name": "Quantum Hardware",
+    "link": "/cs-8803-o20-quantum-hardware"
+  },
+  {
+    "id": "CS 8803 O23",
+    "name": "Modern Internet Research Methods",
+    "link": "/cs-8803-o23-modern-internet-research-methods"
+  },
+  {
+    "id": "CS 8803 O24",
+    "name": "Intro to Research",
+    "link": "/cs-8803-o24-intro-research"
+  },
+  {
+    "id": "CS 8803 O27",
+    "name": "Computer Graphics in the AI Era",
+    "link": "/cs-8803-o27-computer-graphics-ai-era"
+  },
+  {
+    "id": "CS 8803 O29",
+    "name": "Health Sensing and Interventions",
+    "link": "/cs-8803-o29-health-sensing-and-interventions"
+  },
+  {
+    "id": "CSE 6220",
+    "name": "Intro to High-Performance Computing",
+    "link": "/cse-6220-intro-high-performance-computing",
+    "isFoundational": true
+  },
+  {
+    "id": "CSE 6242",
+    "name": "Data and Visual AnalyticsA",
+    "link": "/cse-6242-data-and-visual-analytics",
+    "isFoundational": true
+  },
+  {
+    "id": "CSE 6250",
+    "name": "Big Data for Health Informatics",
+    "link": "/cse-6250-big-data-health-informatics",
+    "isFoundational": true
+  },
+  {
+    "id": "CSE 6742",
+    "name": "Modeling, Simulation, and Military GamingC",
+    "link": "/cse-6742-modeling-simulation-and-military-gaming"
+  },
+  {
+    "id": "ECE 8803",
+    "name": "Cybersecurity of DronesC",
+    "link": "/ece-8803-cybersecurity-drones"
+  },
+  {
+    "id": "ECE 8843",
+    "name": "Side-Channels and Their Role in CybersecurityC",
+    "link": "/ece-8843-side-channels-and-their-role-cybersecurity"
+  },
+  {
+    "id": "INTA 6450",
+    "name": "Data Analytics & SecurityC",
+    "link": "/inta-6450-data-analytics-and-security"
+  },
+  {
+    "id": "ISYE 6402",
+    "name": "Time Series AnalysisA",
+    "link": "/isye-6402-time-series-analysis"
+  },
+  {
+    "id": "ISYE 6414",
+    "name": "Regression AnalysisA",
+    "link": "/isye-6414-regression-analysis"
+  },
+  {
+    "id": "ISYE 6420",
+    "name": "Bayesian StatisticsA",
+    "link": "/isye-6420-bayesian-statistics",
+    "isFoundational": true
+  },
+  {
+    "id": "ISYE 6501",
+    "name": "Intro to Analytics ModelingA",
+    "link": "/isye-6501-intro-analytics-modeling"
+  },
+  {
+    "id": "ISYE 6525",
+    "name": "Topics on High-Dimensional Data AnalyticsA (formerly ISYE 8803)",
+    "link": "/isye-6525-topics-high-dimensional-data-analytics"
+  },
+  {
+    "id": "ISYE 6644",
+    "name": "Simulation and Modeling for Engineering and ScienceA",
+    "link": "/isye-6644-simulation-and-modeling-engineering-and-science"
+  },
+  {
+    "id": "ISYE 6669",
+    "name": "Deterministic OptimizationA",
+    "link": "/isye-6669-deterministic-optimization"
+  },
+  {
+    "id": "MGT 6311",
+    "name": "Digital MarketingA",
+    "link": "/mgt-6311-digital-marketing"
+  },
+  {
+    "id": "MGT 8813",
+    "name": "Financial ModelingA",
+    "link": "/mgt-8813-financial-modeling"
+  },
+  {
+    "id": "PUBP 6725",
+    "name": "Information Security PoliciesC",
+    "link": "/pubp-6725-information-security-policies"
+  },
+  {
+    "id": "PUBP 8823",
+    "name": "Geopolitics of CybersecurityC",
+    "link": "/pubp-8823-geopolitics-cybersecurity"
+  }
+]

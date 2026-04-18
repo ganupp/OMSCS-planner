@@ -15,10 +15,21 @@ function createSpecializationPills(specs) {
     .join('');
 }
 
-function courseIdFromLine(line) {
-  if (typeof line !== 'string') return '';
-  const tokens = line.trim().split(/\s+/).filter(Boolean);
-  return tokens.slice(0, 2).join(' ');
+function yesNoPill(isYes) {
+  if (isYes === true) {
+    return '<span class="inline-flex rounded-full bg-accent px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-white">Yes</span>';
+  }
+  if (isYes === false) {
+    return '<span class="inline-flex rounded-full border border-black/10 bg-bg-color px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-black">No</span>';
+  }
+  return '<span class="text-sm text-black/50">—</span>';
+}
+
+function formatRating(stats) {
+  const avg = stats && typeof stats.avgOverall === 'number' ? stats.avgOverall : null;
+  const n = stats && typeof stats.numReviews === 'number' ? stats.numReviews : null;
+  if (avg === null || n === null || n === 0) return '—';
+  return `${avg.toFixed(2)}(${n})`;
 }
 
 function normalizeBaseForData(baseUri) {
@@ -47,7 +58,7 @@ function showError(message, details) {
   }
   if (tableBody) {
     tableBody.innerHTML =
-      '<tr><td colspan="4" class="px-6 py-12 text-center text-sm text-black/60">Unable to load course catalog.</td></tr>';
+      '<tr><td colspan="5" class="px-6 py-12 text-center text-sm text-black/60">Unable to load course catalog.</td></tr>';
   }
 }
 
@@ -62,34 +73,50 @@ function showError(message, details) {
     const baseDirUrl = normalizeBaseForData(document.baseURI || window.location.href);
     const coursesUrl = new URL('data/courses.json', baseDirUrl).toString();
     const specializationsUrl = new URL('data/specializations.json', baseDirUrl).toString();
+    const statsUrl = new URL('data/course-stats.json', baseDirUrl).toString();
 
-    const [coursesRes, specsRes] = await Promise.all([fetch(coursesUrl), fetch(specializationsUrl)]);
+    const [coursesRes, specsRes, statsRes] = await Promise.all([
+      fetch(coursesUrl),
+      fetch(specializationsUrl),
+      fetch(statsUrl)
+    ]);
     if (!coursesRes.ok) throw new Error(`Unable to fetch courses.json (${coursesRes.status})`);
     if (!specsRes.ok) throw new Error(`Unable to fetch specializations.json (${specsRes.status})`);
+    if (!statsRes.ok) throw new Error(`Unable to fetch course-stats.json (${statsRes.status})`);
 
-    const [courses, specializationsData] = await Promise.all([coursesRes.json(), specsRes.json()]);
+    const [coursesData, specializationsData, statsData] = await Promise.all([
+      coursesRes.json(),
+      specsRes.json(),
+      statsRes.json()
+    ]);
+
+    const courses = coursesData && typeof coursesData === 'object' ? Object.values(coursesData) : [];
+    const courseStats = statsData && typeof statsData === 'object' ? statsData : {};
 
     const courseToSpecs = {};
-    const specs = (specializationsData && specializationsData.specializationsWithCourses) || [];
-    specs.forEach((spec) => {
-      const courseLines = Array.isArray(spec.courses)
-        ? spec.courses
-        : [...((spec.courses && spec.courses.core) || []), ...((spec.courses && spec.courses.electives) || [])];
+    if (specializationsData && typeof specializationsData === 'object') {
+      Object.values(specializationsData).forEach((spec) => {
+        if (!spec || typeof spec !== 'object') return;
+        if (!spec.name) return;
 
-      courseLines.forEach((line) => {
-        const courseId = courseIdFromLine(line);
-        if (!courseId) return;
-        if (!courseToSpecs[courseId]) courseToSpecs[courseId] = [];
-        if (!courseToSpecs[courseId].includes(spec.name)) {
-          courseToSpecs[courseId].push(spec.name);
-        }
+        const specName = spec.name;
+        const core = Array.isArray(spec.coreCourses)
+          ? spec.coreCourses.flatMap((g) => (g && Array.isArray(g.courseIds) ? g.courseIds : []))
+          : [];
+        const electives = Array.isArray(spec.electiveCourseIds) ? spec.electiveCourseIds : [];
+
+        [...core, ...electives].forEach((courseId) => {
+          if (typeof courseId !== 'string' || !courseId) return;
+          if (!courseToSpecs[courseId]) courseToSpecs[courseId] = [];
+          if (!courseToSpecs[courseId].includes(specName)) courseToSpecs[courseId].push(specName);
+        });
       });
-    });
+    }
 
     if (!Array.isArray(courses) || courses.length === 0) {
       if (tableBody) {
         tableBody.innerHTML =
-          '<tr><td colspan="4" class="px-6 py-12 text-center text-sm text-black/60">No courses available.</td></tr>';
+          '<tr><td colspan="5" class="px-6 py-12 text-center text-sm text-black/60">No courses available.</td></tr>';
       }
       return;
     }
@@ -98,14 +125,22 @@ function showError(message, details) {
     if (tableBody) tableBody.innerHTML = '';
 
     courses.forEach((course) => {
-      const specsForCourse = courseToSpecs[course.id] || [];
+      if (!course || typeof course !== 'object') return;
+      const courseId = course.courseId;
+      if (typeof courseId !== 'string' || !courseId) return;
+
+      const specsForCourse = courseToSpecs[courseId] || [];
+      const foundational = course.isFoundational === true;
+      const rating = formatRating(courseStats[courseId]);
+
       const row = document.createElement('tr');
       row.className = 'border-t border-black/10';
       row.innerHTML = `
-        <td class="px-6 py-5 align-top text-sm font-semibold text-black">${course.id}</td>
-        <td class="px-6 py-5 align-top text-sm text-black/90">${course.name}</td>
+        <td class="px-6 py-5 align-top text-sm font-semibold text-black">${courseId}</td>
+        <td class="px-6 py-5 align-top text-sm text-black/90">${course.name || '—'}</td>
         <td class="px-6 py-5 align-top text-sm text-black/90">${createSpecializationPills(specsForCourse)}</td>
-        <td class="px-6 py-5 align-top text-sm font-medium text-black">${course.isFoundational ? 'Yes' : 'No'}</td>
+        <td class="px-6 py-5 align-top text-sm font-medium text-black">${yesNoPill(foundational)}</td>
+        <td class="px-6 py-5 align-top text-sm font-medium text-black">${rating}</td>
       `;
       tableBody.appendChild(row);
     });

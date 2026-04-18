@@ -1,427 +1,637 @@
 [
   {
-    "id": "CS 6035",
-    "name": "Introduction to Information Security",
-    "link": "/cs-6035-introduction-information-security",
-    "isFoundational": true
+    "id": "Any Core",
+    "name": "Courses in excess of the 9 hour requirement may be used as Computing Systems Electives",
+    "link": null
   },
   {
-    "id": "CS 6150",
-    "name": "Computing for Good",
-    "link": "/cs-6150-computing-good"
+    "id": "Any Special",
+    "name": "Topics (CS 8803) course that is being taught by a School of Computer Science faculty member may also count as a Computing Systems elective. The definition of \"School of Computer Science faculty member\" is a faculty member who appears on the School of Computer Science website: https://scs.gatech.edu/people/faculty",
+    "link": null
+  },
+  {
+    "id": "Approved Substitutions",
+    "name": "Approved Substitutions",
+    "link": null
+  },
+  {
+    "id": "CS 6010",
+    "name": "Principles of Design",
+    "link": null
+  },
+  {
+    "id": "CS 6035",
+    "name": "Introduction to Information Security",
+    "link": null
   },
   {
     "id": "CS 6200",
-    "name": "Introduction to Operating Systems (formerly CS 8803 O02)",
-    "link": "/cs-6200-introduction-operating-systems",
-    "isFoundational": true
+    "name": "Graduate Introduction to Operating Systems",
+    "link": null
   },
   {
     "id": "CS 6210",
     "name": "Advanced Operating Systems",
-    "link": "/cs-6210-advanced-operating-systems",
-    "isFoundational": true
+    "link": null
   },
   {
-    "id": "CS 6211",
-    "name": "System Design for Cloud Computing (formerly CS 8803 O12)",
-    "link": "/cs-6211-system-design-cloud-computing",
-    "isFoundational": true
+    "id": "CS 6220",
+    "name": "Big Data Systems & Analysis",
+    "link": null
+  },
+  {
+    "id": "CS 6235",
+    "name": "Real Time Systems",
+    "link": null
   },
   {
     "id": "CS 6238",
-    "name": "Secure Computer SystemsC",
-    "link": "/cs-6238-secure-computer-systems",
-    "isFoundational": true
+    "name": "Secure Computer Systems",
+    "link": null
+  },
+  {
+    "id": "CS 6241",
+    "name": "Compiler Design",
+    "link": null
   },
   {
     "id": "CS 6250",
-    "name": "Computer NetworksC",
-    "link": "/cs-6250-computer-networks",
-    "isFoundational": true
+    "name": "Computer Networks",
+    "link": null
   },
   {
     "id": "CS 6260",
-    "name": "Applied CryptographyC",
-    "link": "/cs-6260-applied-cryptography",
-    "isFoundational": true
-  },
-  {
-    "id": "CS 6261",
-    "name": "Security Incident ResponseC (formerly CS 8803 O22)",
-    "link": "/cs-6261-security-incident-response"
+    "name": "Applied Cryptography",
+    "link": null
   },
   {
     "id": "CS 6262",
     "name": "Network Security",
-    "link": "/cs-6262-network-security",
-    "isFoundational": true
+    "link": null
   },
   {
     "id": "CS 6263",
-    "name": "Intro to Cyber Physical Systems Security (formerly CS 8803 O07)",
-    "link": "/cs-6263-intro-cyber-physical-systems-security",
-    "isFoundational": true
-  },
-  {
-    "id": "CS 6264",
-    "name": "Information Security Lab - System and Network DefensesC (formerly CS 8803 O11)",
-    "link": "/cs-6264-information-security-lab-system-and-network-defenses",
-    "isFoundational": true
-  },
-  {
-    "id": "CS 6265",
-    "name": "Information Security LabC",
-    "link": "/cs-6265-information-security-lab"
+    "name": "Intro to Cyber Physical Systems Security",
+    "link": null
   },
   {
     "id": "CS 6290",
-    "name": "High Performance Computer Architecture",
-    "link": "/cs-6290-high-performance-computer-architecture",
-    "isFoundational": true
+    "name": "High-Performance Computer Architecture",
+    "link": null
   },
   {
     "id": "CS 6291",
-    "name": "Embedded Systems Optimization (formerly CS 8803 O04)",
-    "link": "/cs-6291-embedded-systems-optimization",
-    "isFoundational": true
+    "name": "Embedded Software Optimization",
+    "link": null
   },
   {
     "id": "CS 6300",
     "name": "Software Development Process",
-    "link": "/cs-6300-software-development-process",
-    "isFoundational": true
+    "link": null
+  },
+  {
+    "id": "CS 6301",
+    "name": "Advanced Topics in Software Engineering",
+    "link": null
   },
   {
     "id": "CS 6310",
     "name": "Software Architecture and Design",
-    "link": "/cs-6310-software-architecture-and-design",
-    "isFoundational": true
+    "link": null
+  },
+  {
+    "id": "CS 6320",
+    "name": "Software Requirements Analysis and Specification",
+    "link": null
   },
   {
     "id": "CS 6340",
-    "name": "Software Analysis",
-    "link": "/cs-6340-software-analysis",
-    "isFoundational": true
+    "name": "Software Analysis and Testing",
+    "link": null
+  },
+  {
+    "id": "CS 6365",
+    "name": "Introduction to Enterprise Computing",
+    "link": null
+  },
+  {
+    "id": "CS 6390",
+    "name": "Programming Languages",
+    "link": null
   },
   {
     "id": "CS 6400",
-    "name": "Database Systems Concepts and Design",
-    "link": "/cs-6400-database-systems-concepts-and-design",
-    "isFoundational": true
+    "name": "Database Systems Concepts and Designs",
+    "link": null
   },
   {
     "id": "CS 6422",
     "name": "Database System Implementation",
-    "link": "/cs-6422-database-system-implementation",
-    "isFoundational": true
+    "link": null
+  },
+  {
+    "id": "CS 6423",
+    "name": "Advanced Database System Implementation",
+    "link": null
   },
   {
     "id": "CS 6435",
-    "name": "Digital Health Equity (formerly CS 8803 O16)",
-    "link": "/cs-6435-digital-health-equity",
-    "isFoundational": true
+    "name": "Digital Health Equity",
+    "link": null
   },
   {
     "id": "CS 6440",
-    "name": "Intro to Health Informatics",
-    "link": "/cs-6440-intro-health-informatics",
-    "isFoundational": true
+    "name": "Introduction to Health Informatics",
+    "link": null
+  },
+  {
+    "id": "CS 6451",
+    "name": "Intro to HCC",
+    "link": null
+  },
+  {
+    "id": "CS 6452",
+    "name": "Prototyping Interactive Systems",
+    "link": null
+  },
+  {
+    "id": "CS 6455",
+    "name": "User Interface Design and Evaluation",
+    "link": null
+  },
+  {
+    "id": "CS 6456",
+    "name": "Principles of User Interface Software",
+    "link": null
   },
   {
     "id": "CS 6457",
     "name": "Video Game Design",
-    "link": "/cs-6457-video-game-design",
-    "isFoundational": true
+    "link": null
   },
   {
     "id": "CS 6460",
-    "name": "Educational Technology",
-    "link": "/cs-6460-educational-technology",
-    "isFoundational": true
+    "name": "Educational Technology: Conceptual Foundations",
+    "link": null
+  },
+  {
+    "id": "CS 6465",
+    "name": "Computational Journalism",
+    "link": null
+  },
+  {
+    "id": "CS 6470",
+    "name": "Design of Online Communities",
+    "link": null
+  },
+  {
+    "id": "CS 6471",
+    "name": "Computational Social Science",
+    "link": null
+  },
+  {
+    "id": "CS 6474",
+    "name": "Social Computing",
+    "link": null
   },
   {
     "id": "CS 6475",
     "name": "Computational Photography",
-    "link": "/cs-6475-computational-photography",
-    "isFoundational": true
+    "link": null
   },
   {
     "id": "CS 6476",
     "name": "Computer Vision",
-    "link": "/cs-6476-computer-vision",
-    "isFoundational": true
+    "link": null
   },
   {
     "id": "CS 6491",
-    "name": "Foundations of Computer Graphics",
-    "link": "/cs-6491-foundations-computer-graphics",
-    "isFoundational": true
+    "name": "Computer Graphics",
+    "link": null
+  },
+  {
+    "id": "CS 6492",
+    "name": "Shape Grammars",
+    "link": null
+  },
+  {
+    "id": "CS 6505",
+    "name": "Computability, Algorithms, and Complexity",
+    "link": null
   },
   {
     "id": "CS 6515",
-    "name": "Intro to Graduate Algorithms (formerly CS 8803 GA)",
-    "link": "/cs-6515-intro-graduate-algorithms",
-    "isFoundational": true
+    "name": "Introduction to Graduate Algorithms",
+    "link": null
+  },
+  {
+    "id": "CS 6520",
+    "name": "Computational Complexity Theory",
+    "link": null
+  },
+  {
+    "id": "CS 6550",
+    "name": "Design and Analysis of Algorithms",
+    "link": null
   },
   {
     "id": "CS 6601",
     "name": "Artificial Intelligence",
-    "link": "/cs-6601-artificial-intelligence",
-    "isFoundational": true
+    "link": null
   },
   {
     "id": "CS 6603",
-    "name": "AI, Ethics, and Society (formerly CS 8803 O10)",
-    "link": "/cs-6603-ai-ethics-and-society",
-    "isFoundational": true
+    "name": "AI, Ethics, and Society",
+    "link": null
   },
   {
     "id": "CS 6675",
-    "name": "Advanced Internet Systems and Applications",
-    "link": "/cs-6675-advanced-internet-systems-and-applications",
-    "isFoundational": true
+    "name": "Advanced Internet Computing Systems and Applications",
+    "link": null
   },
   {
-    "id": "CS 6747",
-    "name": "Advanced Malware AnalysisC (formerly CS 8813)",
-    "link": "/cs-6747-advanced-malware-analysis"
+    "id": "CS 6730",
+    "name": "Data Visualization Principles",
+    "link": null
   },
   {
     "id": "CS 6750",
     "name": "Human-Computer Interaction",
-    "link": "/cs-6750-human-computer-interaction",
-    "isFoundational": true
+    "link": null
+  },
+  {
+    "id": "CS 6763",
+    "name": "Design of Design Environments",
+    "link": null
+  },
+  {
+    "id": "CS 6770",
+    "name": "Mixed Reality Experience Design",
+    "link": null
   },
   {
     "id": "CS 6795",
     "name": "Introduction to Cognitive Science",
-    "link": "/cs-6795-introduction-cognitive-science",
-    "isFoundational": true
+    "link": null
   },
   {
     "id": "CS 7210",
     "name": "Distributed Computing",
-    "link": "/cs-7210-distributed-computing",
-    "isFoundational": true
+    "link": null
+  },
+  {
+    "id": "CS 7260",
+    "name": "Internetworking Architectures and Protocols",
+    "link": null
+  },
+  {
+    "id": "CS 7270",
+    "name": "Networked Applications and Services",
+    "link": null
   },
   {
     "id": "CS 7280",
     "name": "Network Science",
-    "link": "/cs-7280-network-science",
-    "isFoundational": true
+    "link": null
   },
   {
-    "id": "CS 7295",
-    "name": "GPU Hardware and Software (formerly CS 8803 O21)",
-    "link": "/cs-7295-gpu-hardware-and-software",
-    "isFoundational": true
+    "id": "CS 7290",
+    "name": "Advanced Topics in Microarchitecture",
+    "link": null
   },
   {
-    "id": "CS 7400",
-    "name": "Quantum Computing (formerly CS 8803 O13)",
-    "link": "/cs-7400-quantum-computing",
-    "isFoundational": true
+    "id": "CS 7292",
+    "name": "Reliability and Security in Computer Architecture",
+    "link": null
+  },
+  {
+    "id": "CS 7450",
+    "name": "Information Visualization",
+    "link": null
+  },
+  {
+    "id": "CS 7451",
+    "name": "Human-Centered Data Analysis",
+    "link": null
+  },
+  {
+    "id": "CS 7455",
+    "name": "Issues in HCC",
+    "link": null
+  },
+  {
+    "id": "CS 7460",
+    "name": "Collaborative Computing",
+    "link": null
+  },
+  {
+    "id": "CS 7465",
+    "name": "Educational Technology: Design and Evaluation",
+    "link": null
+  },
+  {
+    "id": "CS 7467",
+    "name": "Computer-Supported Collaborative Learning",
+    "link": null
   },
   {
     "id": "CS 7470",
-    "name": "Mobile & Ubiquitous Computing",
-    "link": "/cs-7470-mobile-ubiquitous-computing",
-    "isFoundational": true
+    "name": "Mobile and Ubiquitous Computing",
+    "link": null
+  },
+  {
+    "id": "CS 7476",
+    "name": "Advanced Computer Vision",
+    "link": null
   },
   {
     "id": "CS 7496",
     "name": "Computer Animation",
-    "link": "/cs-7496-computer-animation",
-    "isFoundational": true
+    "link": null
+  },
+  {
+    "id": "CS 7499",
+    "name": "3D Reconstruction",
+    "link": null
+  },
+  {
+    "id": "CS 7510",
+    "name": "Graph Algorithms",
+    "link": null
+  },
+  {
+    "id": "CS 7520",
+    "name": "Approximation Algorithms",
+    "link": null
+  },
+  {
+    "id": "CS 7530",
+    "name": "Randomized Algorithms",
+    "link": null
+  },
+  {
+    "id": "CS 7535",
+    "name": "Markov Chain Monte Carlo",
+    "link": null
+  },
+  {
+    "id": "CS 7540",
+    "name": "Spectral Algorithms",
+    "link": null
+  },
+  {
+    "id": "CS 7545",
+    "name": "Machine Learning Theory",
+    "link": null
+  },
+  {
+    "id": "CS 7560",
+    "name": "Theory of Cryptography",
+    "link": null
+  },
+  {
+    "id": "CS 7610",
+    "name": "Modeling and Design",
+    "link": null
+  },
+  {
+    "id": "CS 7616",
+    "name": "Pattern Recognition",
+    "link": null
+  },
+  {
+    "id": "CS 7620",
+    "name": "Case-based Reasoning",
+    "link": null
+  },
+  {
+    "id": "CS 7626",
+    "name": "Behavioral Imaging",
+    "link": null
+  },
+  {
+    "id": "CS 7630",
+    "name": "Autonomous Robotics",
+    "link": null
+  },
+  {
+    "id": "CS 7631",
+    "name": "Autonomous Multi-Robot Systems",
+    "link": null
   },
   {
     "id": "CS 7632",
     "name": "Game AI",
-    "link": "/cs-7632-game-ai",
-    "isFoundational": true
+    "link": null
+  },
+  {
+    "id": "CS 7633",
+    "name": "Human Robot Interaction",
+    "link": null
+  },
+  {
+    "id": "CS 7634",
+    "name": "AI Storytelling in Virtual Worlds",
+    "link": null
+  },
+  {
+    "id": "CS 7636",
+    "name": "Computational Perception",
+    "link": null
   },
   {
     "id": "CS 7637",
-    "name": "Knowledge-Based Artificial Intelligence - Cognitive Systems",
-    "link": "/cs-7637-knowledge-based-artificial-intelligence-cognitive-systems",
-    "isFoundational": true
+    "name": "Knowledge-Based AI",
+    "link": null
   },
   {
     "id": "CS 7638",
-    "name": "Robotics",
-    "link": "/cs-7638-robotics-ai-techniques",
-    "isFoundational": true
+    "name": "Artificial Intelligence Techniques for Robotics",
+    "link": null
   },
   {
     "id": "CS 7639",
-    "name": "Cyber-Physical Design and Analysis (formerly CS 8803 O09)",
-    "link": "/cs-7639-cyber-physical-design-and-analysis",
-    "isFoundational": true
+    "name": "Cyber Physical Design and Analysis",
+    "link": null
   },
   {
     "id": "CS 7641",
     "name": "Machine Learning",
-    "link": "/cs-7641-machine-learning",
-    "isFoundational": true
+    "link": null
   },
   {
     "id": "CS 7642",
-    "name": "Reinforcement Learning (formerly CS 8803 O03)",
-    "link": "/cs-7642-reinforcement-learning",
-    "isFoundational": true
+    "name": "Reinforcement Learning and Decision Making",
+    "link": null
   },
   {
     "id": "CS 7643",
     "name": "Deep Learning",
-    "link": "/cs-7643-deep-learning",
-    "isFoundational": true
+    "link": null
+  },
+  {
+    "id": "CS 7644",
+    "name": "Machine Learning for Robotics",
+    "link": null
   },
   {
     "id": "CS 7646",
     "name": "Machine Learning for Trading",
-    "link": "/cs-7646-machine-learning-trading",
-    "isFoundational": true
+    "link": null
+  },
+  {
+    "id": "CS 7647",
+    "name": "Machine Learning with Limited Supervision",
+    "link": null
+  },
+  {
+    "id": "CS 7648",
+    "name": "Interactive Robot Learning",
+    "link": null
+  },
+  {
+    "id": "CS 7649",
+    "name": "Robot Intelligence: Planning",
+    "link": null
   },
   {
     "id": "CS 7650",
-    "name": "Natural Language Processing",
-    "link": "/cs-7650-natural-language-processing",
-    "isFoundational": true
+    "name": "Natural Language",
+    "link": null
   },
   {
-    "id": "CS 8803 O08",
-    "name": "Compilers - Theory and Practice",
-    "link": "/cs-8803-o08-compilers-theory-and-practice",
-    "isFoundational": true
+    "id": "CS 7651",
+    "name": "Human and Machine Learning",
+    "link": null
   },
   {
-    "id": "CS 8803 O15",
-    "name": "Introduction to Computer Law",
-    "link": "/cs-8803-o15-introduction-computer-law"
+    "id": "CS 7695",
+    "name": "Philosophy of Cognition",
+    "link": null
   },
   {
-    "id": "CS 8803 O17",
-    "name": "Global Entrepreneurship",
-    "link": "/cs-8803-o17-global-entrepreneurship"
+    "id": "CS 7697",
+    "name": "Cognitive Models of Science and Technology",
+    "link": null
   },
   {
-    "id": "CS 8803 O20",
-    "name": "Quantum Hardware",
-    "link": "/cs-8803-o20-quantum-hardware"
+    "id": "CS 7790",
+    "name": "Cognitive Modeling",
+    "link": null
   },
   {
-    "id": "CS 8803 O23",
-    "name": "Modern Internet Research Methods",
-    "link": "/cs-8803-o23-modern-internet-research-methods"
+    "id": "CS 8803",
+    "name": "Computational Creativity",
+    "link": null
   },
   {
-    "id": "CS 8803 O24",
-    "name": "Intro to Research",
-    "link": "/cs-8803-o24-intro-research"
+    "id": "CS/CSE 6230",
+    "name": "High-Performance Parallel Computing: Tools and Applications",
+    "link": null
   },
   {
-    "id": "CS 8803 O27",
-    "name": "Computer Graphics in the AI Era",
-    "link": "/cs-8803-o27-computer-graphics-ai-era"
+    "id": "CS/CSE 8803",
+    "name": "Special Topics: Parallel Numerical Algorithms",
+    "link": null
   },
   {
-    "id": "CS 8803 O29",
-    "name": "Health Sensing and Interventions",
-    "link": "/cs-8803-o29-health-sensing-and-interventions"
+    "id": "CSE 6140",
+    "name": "Computational Science and Engineering Algorithms",
+    "link": null
   },
   {
     "id": "CSE 6220",
-    "name": "Intro to High-Performance Computing",
-    "link": "/cse-6220-intro-high-performance-computing",
-    "isFoundational": true
+    "name": "High Performance Computing",
+    "link": null
+  },
+  {
+    "id": "CSE 6221",
+    "name": "Multicore Computing: Concurrency and Parallelism on the Desktop",
+    "link": null
+  },
+  {
+    "id": "CSE 6236",
+    "name": "Parallel and Distributed Simulation",
+    "link": null
+  },
+  {
+    "id": "CSE 6240",
+    "name": "Web Search and Text Mining",
+    "link": null
   },
   {
     "id": "CSE 6242",
-    "name": "Data and Visual AnalyticsA",
-    "link": "/cse-6242-data-and-visual-analytics",
-    "isFoundational": true
+    "name": "Data and Visual Analytics",
+    "link": null
   },
   {
     "id": "CSE 6250",
-    "name": "Big Data for Health Informatics",
-    "link": "/cse-6250-big-data-health-informatics",
-    "isFoundational": true
+    "name": "Big Data for Health",
+    "link": null
   },
   {
-    "id": "CSE 6742",
-    "name": "Modeling, Simulation, and Military GamingC",
-    "link": "/cse-6742-modeling-simulation-and-military-gaming"
+    "id": "CSE 6730",
+    "name": "Modeling and Simulation: Foundations and Implementation",
+    "link": null
   },
   {
-    "id": "ECE 8803",
-    "name": "Cybersecurity of DronesC",
-    "link": "/ece-8803-cybersecurity-drones"
+    "id": "CSE 6740",
+    "name": "Computational Data Analysis",
+    "link": null
   },
   {
-    "id": "ECE 8843",
-    "name": "Side-Channels and Their Role in CybersecurityC",
-    "link": "/ece-8843-side-channels-and-their-role-cybersecurity"
+    "id": "CSE 8803",
+    "name": "Special Topics: Algorithms for Medical Imaging and Inverse Problems",
+    "link": null
   },
   {
-    "id": "INTA 6450",
-    "name": "Data Analytics & SecurityC",
-    "link": "/inta-6450-data-analytics-and-security"
+    "id": "CSE 8803/CHEM",
+    "name": "6485 Computational Chemistry",
+    "link": null
   },
   {
-    "id": "ISYE 6402",
-    "name": "Time Series AnalysisA",
-    "link": "/isye-6402-time-series-analysis"
+    "id": "CSE/CHEM 8803",
+    "name": "Special Topics: Quantum Information, Computation, and Simulation",
+    "link": null
   },
   {
-    "id": "ISYE 6414",
-    "name": "Regression AnalysisA",
-    "link": "/isye-6414-regression-analysis"
+    "id": "CSE/MATH 6643",
+    "name": "Numerical Linear Algebra",
+    "link": null
+  },
+  {
+    "id": "CSE/MATH 6644",
+    "name": "Iterative Methods for Systems of Equations",
+    "link": null
+  },
+  {
+    "id": "INTA 6742",
+    "name": "Modeling, Simulation and Military Gaming",
+    "link": null
+  },
+  {
+    "id": "ISYE 6416",
+    "name": "Computational Statistics",
+    "link": null
   },
   {
     "id": "ISYE 6420",
-    "name": "Bayesian StatisticsA",
-    "link": "/isye-6420-bayesian-statistics",
-    "isFoundational": true
-  },
-  {
-    "id": "ISYE 6501",
-    "name": "Intro to Analytics ModelingA",
-    "link": "/isye-6501-intro-analytics-modeling"
-  },
-  {
-    "id": "ISYE 6525",
-    "name": "Topics on High-Dimensional Data AnalyticsA (formerly ISYE 8803)",
-    "link": "/isye-6525-topics-high-dimensional-data-analytics"
+    "name": "Bayesian Methods",
+    "link": null
   },
   {
     "id": "ISYE 6644",
-    "name": "Simulation and Modeling for Engineering and ScienceA",
-    "link": "/isye-6644-simulation-and-modeling-engineering-and-science"
+    "name": "Simulation",
+    "link": null
   },
   {
-    "id": "ISYE 6669",
-    "name": "Deterministic OptimizationA",
-    "link": "/isye-6669-deterministic-optimization"
+    "id": "ISYE 6664",
+    "name": "Stochastic Optimization",
+    "link": null
   },
   {
-    "id": "MGT 6311",
-    "name": "Digital MarketingA",
-    "link": "/mgt-6311-digital-marketing"
-  },
-  {
-    "id": "MGT 8813",
-    "name": "Financial ModelingA",
-    "link": "/mgt-8813-financial-modeling"
-  },
-  {
-    "id": "PUBP 6725",
-    "name": "Information Security PoliciesC",
-    "link": "/pubp-6725-information-security-policies"
-  },
-  {
-    "id": "PUBP 8823",
-    "name": "Geopolitics of CybersecurityC",
-    "link": "/pubp-8823-geopolitics-cybersecurity"
+    "id": "MATH 6640",
+    "name": "Introduction to Numerical Methods for Partial Differential Equations",
+    "link": null
   }
 ]

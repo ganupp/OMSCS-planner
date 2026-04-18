@@ -15,6 +15,12 @@ function createSpecializationPills(specs) {
     .join('');
 }
 
+function courseIdFromLine(line) {
+  if (typeof line !== 'string') return '';
+  const tokens = line.trim().split(/\s+/).filter(Boolean);
+  return tokens.slice(0, 2).join(' ');
+}
+
 function normalizeBaseForData(baseUri) {
   const url = new URL(baseUri);
   url.search = '';
@@ -66,7 +72,13 @@ function showError(message, details) {
     const courseToSpecs = {};
     const specs = (specializationsData && specializationsData.specializationsWithCourses) || [];
     specs.forEach((spec) => {
-      (spec.courses || []).forEach((courseId) => {
+      const courseLines = Array.isArray(spec.courses)
+        ? spec.courses
+        : [...((spec.courses && spec.courses.core) || []), ...((spec.courses && spec.courses.electives) || [])];
+
+      courseLines.forEach((line) => {
+        const courseId = courseIdFromLine(line);
+        if (!courseId) return;
         if (!courseToSpecs[courseId]) courseToSpecs[courseId] = [];
         if (!courseToSpecs[courseId].includes(spec.name)) {
           courseToSpecs[courseId].push(spec.name);

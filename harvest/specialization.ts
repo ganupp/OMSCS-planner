@@ -7,7 +7,10 @@ export interface Specialization {
 }
 
 export interface SpecializationWithCourses extends Specialization {
-    courses: string[];
+    courses: {
+        core: string[];
+        electives: string[];
+    };
 }
 
 export class SpecializationCrawler extends BaseCrawler {
@@ -16,17 +19,6 @@ export class SpecializationCrawler extends BaseCrawler {
     constructor(url?: string) {
         super();
         this.URL = url || '';
-    }
-
-    private static normalizeCourseId(rawText: string): string {
-        const cleaned = BaseCrawler.normalizeText(rawText.replace(/\*/g, ''));
-        const tokens = cleaned.split(/\s+/);
-
-        if (tokens.length >= 3 && /^\d+$/.test(tokens[1]) && /^[A-Z0-9]+$/.test(tokens[2])) {
-            return tokens.slice(0, 3).join(' ');
-        }
-
-        return tokens.slice(0, 2).join(' ');
     }
 
     cache: any | null = null;
@@ -63,7 +55,7 @@ export class SpecializationCrawler extends BaseCrawler {
             const id = String(i + 1);
 
             let currentEl = $(el).next();
-            const elementsBefore: cheerio.Cheerio[] = [];
+            const elementsBefore: any[] = [];
             while (currentEl.length) {
                 if (currentEl.is('h4')) break;
                 elementsBefore.push(currentEl);
@@ -85,17 +77,20 @@ export class SpecializationCrawler extends BaseCrawler {
                         const courseText = BaseCrawler.normalizeText($(li).text());
                         if (!courseText) return;
 
-                        const courseID = SpecializationCrawler.normalizeCourseId(courseText);
-                        if (courseID) {
-                            courses[currentSection!].push(courseID);
-                        }
+                        courses[currentSection!].push(courseText);
                     });
                 }
             });
 
-            const flattenedCourses = [...courses.core, ...courses.electives].filter(Boolean);
             specializations.push({ id, name });
-            specializationWithCourses.push({ id, name, courses: flattenedCourses });
+            specializationWithCourses.push({
+                id,
+                name,
+                courses: {
+                    core: (courses.core || []).filter(Boolean),
+                    electives: (courses.electives || []).filter(Boolean)
+                }
+            });
         });
 
         return { specializations, specializationWithCourses };

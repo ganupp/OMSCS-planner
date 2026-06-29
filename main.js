@@ -26,6 +26,31 @@ function createCoursePills(courses) {
     .join('');
 }
 
+function getAssignedCourseIds(semesters) {
+  return semesters.flatMap((semester) => semester.courses);
+}
+
+function isCourseAssigned(semesters, courseId) {
+  return getAssignedCourseIds(semesters).includes(courseId);
+}
+
+function totalAssignedCourses(semesters) {
+  return getAssignedCourseIds(semesters).length;
+}
+
+function countFoundationalInFirstTwo(semesters, coursesMap) {
+  const firstTwo = semesters.slice(0, 2);
+  return firstTwo.reduce((count, semester) => {
+    return (
+      count +
+      semester.courses.reduce((inner, courseId) => {
+        const course = coursesMap[courseId];
+        return inner + (course && course.isFoundational === true ? 1 : 0);
+      }, 0)
+    );
+  }, 0);
+}
+
 function yesNoPill(isYes) {
   if (isYes === true) {
     return '<span class="inline-flex rounded-full bg-accent px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-white">Yes</span>';
@@ -46,8 +71,8 @@ function sortCourses(courses, field, direction) {
     let right;
 
     if (field === 'specializations') {
-      left = (a.specializations || []).join(', ');
-      right = (b.specializations || []).join(', ');
+      left = (courseToSpecs[a.courseId] || []).join(', ');
+      right = (courseToSpecs[b.courseId] || []).join(', ');
     } else if (field === 'language') {
       left = a.primaryLanguage || '';
       right = b.primaryLanguage || '';
@@ -280,6 +305,214 @@ function showError(message, details) {
     buildSelectOptions(languageChoices, languageFilter, 'All languages');
     renderSpecializationSummary(mappingData, specializationsData);
 
+    const planner = {
+      semesters: [
+        { id: 1, name: 'Semester 1', courses: [] },
+        { id: 2, name: 'Semester 2', courses: [] }
+      ],
+      selectedSemesterId: 1
+    };
+    const plannerCount = document.getElementById('planner-count');
+    const plannerWarning = document.getElementById('planner-warning');
+    const plannerAchieved = document.getElementById('planner-achieved');
+    const plannerProgress = document.getElementById('planner-progress');
+    const semesterList = document.getElementById('semester-list');
+    const addSemesterButton = document.getElementById('add-semester-btn');
+
+    function getCourseById(courseId) {
+      return courses.find((course) => course.courseId === courseId);
+    }
+
+    function getSelectedSemester() {
+      return planner.semesters.find((semester) => semester.id === planner.selectedSemesterId);
+    }
+
+    function getSelectedCourseIds() {
+      return getAssignedCourseIds(planner.semesters);
+    }
+
+    function getSpecializationProgresses() {
+      const selectedIds = new Set(getSelectedCourseIds());
+      return Object.keys(mappingData).map((specId) => {
+        const specMeta = mappingData[specId] || {};
+        const specName = (specializationsData[specId] && specializationsData[specId].name) || `Specialization ${specId}`;
+        const coreGroups = Array.isArray(specMeta.core) ? specMeta.core : [];
+        const electiveGroups = Array.isArray(specMeta.electives) ? specMeta.electives : [];
+        const requiredCoreCount = coreGroups.reduce((sum, group) => {
+          const requiredCount = parseInt(group.count, 10);
+          return sum + (Number.isFinite(requiredCount) ? requiredCount : 0);
+        }, 0);
+        const requiredElectives = Number.isFinite(parseInt(specMeta.electives_count, 10)) ? parseInt(specMeta.electives_count, 10) : 0;
+
+        const coreGroupStatus = coreGroups.map((group) => {
+          const groupCount = Number.isFinite(parseInt(group.count, 10)) ? parseInt(group.count, 10) : 0;
+          const selectedCount = Array.isArray(group.courses)
+            ? group.courses.filter((courseId) => selectedIds.has(courseId)).length
+            : 0;
+          return {
+            name: group.name || 'Core group',
+            required: groupCount,
+            selected: selectedCount,
+            satisfied: groupCount === 0 || selectedCount >= groupCount
+          };
+        });
+
+        const selectedElectiveIds = new Set(
+          electiveGroups.flatMap((group) => (Array.isArray(group.courses) ? group.courses.filter((courseId) => selectedIds.has(courseId)) : []))
+        );
+        const selectedElectivesCount = selectedElectiveIds.size;
+        const electivesSatisfied = requiredElectives === 0 || selectedElectivesCount >= requiredElectives;
+
+        return {
+          specId,
+          specName,
+          coreGroupStatus,
+          requiredCoreCount,
+          selectedCoreCount: coreGroupStatus.reduce((sum, item) => sum + item.selected, 0),
+          requiredElectives,
+          selectedElectivesCount,
+          electivesSatisfied,
+          achieved: coreGroupStatus.every((group) => group.satisfied) && electivesSatisfied,
+          advises: coreGroupStatus.map((group) => {
+            if (group.satisfied) return `${group.name} done`;
+            return `${group.selected} / ${group.required} from ${group.name}`;
+          })
+        };
+      });
+    }
+
+    function renderPlannerSummary() {
+      if (plannerAchieved) {
+        const achieved = getSpecializationProgresses().filter((spec) => spec.achieved);
+        plannerAchieved.innerHTML = achieved.length
+          ? `<p class="text-sm font-semibold text-black">${achieved.length} specialization${achieved.length === 1 ? '' : 's'} achieved:</p><div class="mt-3 flex flex-wrap gap-2">${achieved
+              .map((spec) => `<span class="inline-flex rounded-full bg-accent px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-white">${spec.specName}</span>`)
+              .join('')}</div>`
+          : '<p class="text-sm text-black/90">No specialization fully completed yet. Keep adding courses to meet the requirements.</p>';
+      }
+
+      if (plannerProgress) {
+        const progress = getSpecializationProgresses().filter((spec) => spec.selectedCoreCount > 0 || spec.selectedElectivesCount > 0);
+        plannerProgress.innerHTML = progress.length
+          ? progress
+              .map((spec) => `
+                <div class="mb-3 rounded-3xl border border-black/10 bg-white p-4">
+                  <div class="mb-2 text-sm font-semibold text-black">${spec.specName}</div>
+                  <div class="text-xs uppercase tracking-[0.18em] text-black/60">Core progress</div>
+                  <div class="mt-1 text-sm text-black/80">${spec.selectedCoreCount} / ${spec.requiredCoreCount}</div>
+                  <div class="mt-3 text-xs uppercase tracking-[0.18em] text-black/60">Elective progress</div>
+                  <div class="mt-1 text-sm text-black/80">${spec.selectedElectivesCount} / ${spec.requiredElectives}</div>
+                  <div class="mt-3 text-xs text-black/60">${spec.electivesSatisfied ? 'Elective requirement met' : 'Electives still needed'}</div>
+                </div>
+              `)
+              .join('')
+          : '<p class="text-sm text-black/90">No selected courses matching specialization requirements yet.</p>';
+      }
+    }
+
+    function renderSemesterPlanner() {
+      if (!semesterList) return;
+      semesterList.innerHTML = planner.semesters
+        .map((semester) => {
+          const isSelected = semester.id === planner.selectedSemesterId;
+          const foundationalCount = semester.courses.reduce((count, courseId) => {
+            const course = getCourseById(courseId);
+            return count + (course && course.isFoundational ? 1 : 0);
+          }, 0);
+          return `
+            <section class="rounded-[28px] border ${isSelected ? 'border-accent bg-accent/5' : 'border-black/10 bg-bg-color'} p-6">
+              <div class="mb-3 flex items-center justify-between gap-3">
+                <button type="button" data-semester-id="${semester.id}" class="semester-select inline-flex items-center gap-2 text-left text-xl font-semibold text-black">
+                  ${semester.name}
+                  <span class="rounded-full bg-white px-3 py-1 text-xs font-semibold text-black/70">${semester.courses.length} courses</span>
+                </button>
+                <div class="text-xs text-black/60">Foundational: ${foundationalCount}</div>
+              </div>
+              <div class="mb-4 flex flex-wrap gap-2">${createCoursePills(semester.courses)}</div>
+              <div class="flex flex-wrap gap-2">
+                ${semester.courses
+                  .map((courseId) => `
+                    <button type="button" data-remove-semester-id="${semester.id}" data-course-id="${courseId}" class="remove-course inline-flex items-center rounded-full border border-black/10 bg-white px-3 py-1 text-xs font-semibold text-black transition hover:bg-black/5">
+                      Remove ${courseId}
+                    </button>
+                  `)
+                  .join('')}
+              </div>
+            </section>
+          `;
+        })
+        .join('');
+
+      updatePlannerStatus();
+      renderPlannerSummary();
+      attachSemesterEvents();
+    }
+
+    function updatePlannerStatus() {
+      const assigned = totalAssignedCourses(planner.semesters);
+      if (plannerCount) plannerCount.textContent = `Assigned courses: ${assigned} / 10`;
+      const foundationalCount = countFoundationalInFirstTwo(planner.semesters, coursesData);
+      if (plannerWarning) {
+        if (assigned > 10) {
+          plannerWarning.textContent = 'Maximum 10 courses may be assigned across all semesters.';
+        } else if (planner.semesters.length >= 2 && foundationalCount < 2) {
+          plannerWarning.textContent = 'At least 2 foundational courses are required in the first two semesters.';
+        } else {
+          plannerWarning.textContent = '';
+        }
+      }
+    }
+
+    function attachSemesterEvents() {
+      document.querySelectorAll('[data-semester-id]').forEach((button) => {
+        button.addEventListener('click', () => {
+          const semesterId = Number(button.getAttribute('data-semester-id'));
+          planner.selectedSemesterId = semesterId;
+          renderSemesterPlanner();
+          updateTable();
+        });
+      });
+      document.querySelectorAll('[data-remove-semester-id]').forEach((button) => {
+        button.addEventListener('click', () => {
+          const semesterId = Number(button.getAttribute('data-remove-semester-id'));
+          const courseId = button.getAttribute('data-course-id');
+          const semester = planner.semesters.find((sem) => sem.id === semesterId);
+          if (!semester) return;
+          semester.courses = semester.courses.filter((id) => id !== courseId);
+          renderSemesterPlanner();
+          updateTable();
+        });
+      });
+    }
+
+    function canAddCourse(courseId) {
+      if (!courseId || isCourseAssigned(planner.semesters, courseId)) return false;
+      return totalAssignedCourses(planner.semesters) < 10;
+    }
+
+    function addCourseToSelectedSemester(courseId) {
+      const semester = getSelectedSemester();
+      if (!semester || !canAddCourse(courseId)) return;
+      semester.courses.push(courseId);
+      renderSemesterPlanner();
+      updateTable();
+    }
+
+    function addSemester() {
+      const nextId = planner.semesters.length > 0 ? Math.max(...planner.semesters.map((s) => s.id)) + 1 : 1;
+      planner.semesters.push({ id: nextId, name: `Semester ${planner.semesters.length + 1}`, courses: [] });
+      planner.selectedSemesterId = nextId;
+      renderSemesterPlanner();
+    }
+
+    if (addSemesterButton) {
+      addSemesterButton.addEventListener('click', () => {
+        addSemester();
+      });
+    }
+
+    renderSemesterPlanner();
+
     function getSpecializationsForCourse(courseId) {
       return courseToSpecs[courseId] || [];
     }
@@ -328,6 +561,15 @@ function showError(message, details) {
         const specsForCourse = getSpecializationsForCourse(courseId);
         const foundational = course.isFoundational === true;
         const language = course.primaryLanguage || '—';
+        const assigned = isCourseAssigned(planner.semesters, courseId);
+        const activeSemester = getSelectedSemester();
+        const assignedInSelected = activeSemester && activeSemester.courses.includes(courseId);
+        const canAdd = !assigned && totalAssignedCourses(planner.semesters) < 10;
+        const actionButton = assignedInSelected
+          ? '<span class="inline-flex rounded-full bg-accent px-3 py-1 text-xs font-semibold text-white">Added</span>'
+          : assigned
+          ? '<span class="inline-flex rounded-full border border-black/10 bg-bg-color px-3 py-1 text-xs font-semibold text-black">Assigned</span>'
+          : `<button type="button" data-add-course="${courseId}" class="inline-flex rounded-full border border-black/10 bg-white px-4 py-2 text-xs font-semibold text-black transition hover:bg-black/5" ${canAdd ? '' : 'disabled'}>${canAdd ? 'Add' : 'Limit'}</button>`;
 
         const row = document.createElement('tr');
         row.className = 'border-t border-black/10';
@@ -337,8 +579,16 @@ function showError(message, details) {
           <td class="px-6 py-5 align-top text-sm text-black/90">${createSpecializationPills(specsForCourse)}</td>
           <td class="px-6 py-5 align-top text-sm text-black/90">${language}</td>
           <td class="px-6 py-5 align-top text-sm font-medium text-black">${yesNoPill(foundational)}</td>
+          <td class="px-6 py-5 align-top text-sm">${actionButton}</td>
         `;
         tableBody.appendChild(row);
+
+        const addButton = row.querySelector('[data-add-course]');
+        if (addButton) {
+          addButton.addEventListener('click', () => {
+            addCourseToSelectedSemester(courseId);
+          });
+        }
       });
     }
 

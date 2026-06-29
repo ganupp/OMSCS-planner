@@ -15,6 +15,17 @@ function createSpecializationPills(specs) {
     .join('');
 }
 
+function createCoursePills(courses) {
+  if (!Array.isArray(courses) || courses.length === 0) {
+    return '<span class="text-sm text-black/50">—</span>';
+  }
+  return courses
+    .map((courseId) => `
+      <span class="mr-2 mb-2 inline-flex rounded-full border border-black/10 bg-bg-color px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-black">${courseId}</span>
+    `)
+    .join('');
+}
+
 function yesNoPill(isYes) {
   if (isYes === true) {
     return '<span class="inline-flex rounded-full bg-accent px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-white">Yes</span>';
@@ -25,11 +36,114 @@ function yesNoPill(isYes) {
   return '<span class="text-sm text-black/50">—</span>';
 }
 
-function formatRating(stats) {
-  const avg = stats && typeof stats.avgOverall === 'number' ? stats.avgOverall : null;
-  const n = stats && typeof stats.numReviews === 'number' ? stats.numReviews : null;
-  if (avg === null || n === null || n === 0) return '—';
-  return `${avg.toFixed(2)}(${n})`;
+function normalizeText(value) {
+  return (typeof value === 'string' ? value.trim().toLowerCase() : '');
+}
+
+function sortCourses(courses, field, direction) {
+  return courses.slice().sort((a, b) => {
+    let left;
+    let right;
+
+    if (field === 'specializations') {
+      left = (a.specializations || []).join(', ');
+      right = (b.specializations || []).join(', ');
+    } else if (field === 'language') {
+      left = a.primaryLanguage || '';
+      right = b.primaryLanguage || '';
+    } else if (field === 'name') {
+      left = a.name || '';
+      right = b.name || '';
+    } else {
+      left = a.courseId || '';
+      right = b.courseId || '';
+    }
+
+    left = normalizeText(left);
+    right = normalizeText(right);
+
+    if (left < right) return direction === 'asc' ? -1 : 1;
+    if (left > right) return direction === 'asc' ? 1 : -1;
+    return 0;
+  });
+}
+
+function groupUniqueValues(courses, accessor) {
+  const values = new Set();
+  courses.forEach((course) => {
+    const value = accessor(course);
+    if (typeof value === 'string' && value.trim()) {
+      values.add(value.trim());
+    }
+  });
+  return Array.from(values).sort((a, b) => a.localeCompare(b));
+}
+
+function renderSpecializationSummary(mappingData, specializationsData) {
+  const container = document.getElementById('specialization-summary');
+  if (!container) return;
+  const cards = Object.keys(mappingData)
+    .sort((a, b) => {
+      const nameA = (specializationsData[a] && specializationsData[a].name) || a;
+      const nameB = (specializationsData[b] && specializationsData[b].name) || b;
+      return nameA.localeCompare(nameB);
+    })
+    .map((specId) => {
+      const specMeta = mappingData[specId] || {};
+      const specName = (specializationsData[specId] && specializationsData[specId].name) || `Specialization ${specId}`;
+      const coreGroups = Array.isArray(specMeta.core) ? specMeta.core : [];
+      const electiveGroups = Array.isArray(specMeta.electives) ? specMeta.electives : [];
+      const requiredCoreCount = coreGroups.reduce((sum, group) => {
+        const count = parseInt(group.count, 10);
+        return sum + (Number.isFinite(count) ? count : 0);
+      }, 0);
+      const requiredElectives = Number.isFinite(parseInt(specMeta.electives_count, 10)) ? parseInt(specMeta.electives_count, 10) : 0;
+
+      return `
+        <section class="rounded-[28px] border border-black/10 bg-bg-color p-6">
+          <div class="mb-4 flex items-center justify-between gap-3">
+            <div>
+              <h4 class="text-xl font-semibold text-black">${specName}</h4>
+              <p class="mt-2 text-sm text-black/70">Core required: ${requiredCoreCount} · Electives required: ${requiredElectives}</p>
+            </div>
+          </div>
+          <div class="space-y-4">
+            <div>
+              <div class="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-black/60">Core</div>
+              ${coreGroups
+                .map((group) => {
+                  const count = Number.isFinite(parseInt(group.count, 10)) ? parseInt(group.count, 10) : '-';
+                  return `
+                    <div class="mb-3 rounded-3xl border border-black/10 bg-white p-4">
+                      <div class="mb-2 flex items-center justify-between gap-3 text-sm font-semibold text-black">
+                        <span>${group.name || 'Core group'}</span>
+                        <span class="text-black/60">Take ${count}</span>
+                      </div>
+                      <div class="flex flex-wrap">${createCoursePills(group.courses || [])}</div>
+                    </div>
+                  `;
+                })
+                .join('')}
+            </div>
+            <div>
+              <div class="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-black/60">Electives</div>
+              <p class="mb-3 text-sm text-black/70">Choose ${requiredElectives} electives from these groups.</p>
+              ${electiveGroups
+                .map((group) => `
+                  <div class="mb-3 rounded-3xl border border-black/10 bg-white p-4">
+                    <div class="mb-2 text-sm font-semibold text-black">${group.name || 'Elective group'}</div>
+                    <div class="flex flex-wrap">${createCoursePills(group.courses || [])}</div>
+                  </div>
+                `)
+                .join('')}
+            </div>
+          </div>
+        </section>
+      `;
+    })
+    .join('');
+
+  container.innerHTML = cards;
 }
 
 function normalizeBaseForData(baseUri) {
@@ -74,28 +188,32 @@ function showError(message, details) {
     const coursesUrl = new URL('data/courses.json', baseDirUrl).toString();
     const specializationsUrl = new URL('data/specializations.json', baseDirUrl).toString();
     const mappingUrl = new URL('data/mapping.json', baseDirUrl).toString();
-    const statsUrl = new URL('data/course-stats.json', baseDirUrl).toString();
 
-    const [coursesRes, specsRes, mappingRes, statsRes] = await Promise.all([
+    const [coursesRes, specsRes, mappingRes] = await Promise.all([
       fetch(coursesUrl),
       fetch(specializationsUrl),
-      fetch(mappingUrl),
-      fetch(statsUrl)
+      fetch(mappingUrl)
     ]);
     if (!coursesRes.ok) throw new Error(`Unable to fetch courses.json (${coursesRes.status})`);
     if (!specsRes.ok) throw new Error(`Unable to fetch specializations.json (${specsRes.status})`);
     if (!mappingRes.ok) throw new Error(`Unable to fetch mapping.json (${mappingRes.status})`);
-    if (!statsRes.ok) throw new Error(`Unable to fetch course-stats.json (${statsRes.status})`);
 
-    const [coursesData, specializationsData, mappingData, statsData] = await Promise.all([
+    const [coursesData, specializationsData, mappingData] = await Promise.all([
       coursesRes.json(),
       specsRes.json(),
-      mappingRes.json(),
-      statsRes.json()
+      mappingRes.json()
     ]);
 
     const courses = coursesData && typeof coursesData === 'object' ? Object.values(coursesData) : [];
-    const courseStats = statsData && typeof statsData === 'object' ? statsData : {};
+
+    const filters = {
+      search: '',
+      specialization: '',
+      language: '',
+      foundational: '',
+      sortField: 'courseId',
+      sortDirection: 'asc'
+    };
 
     // Build course -> specialization mapping using mapping.json and specializations.json
     const courseToSpecs = {};
@@ -139,47 +257,140 @@ function showError(message, details) {
       return;
     }
 
-    if (courseCount) courseCount.textContent = String(courses.length);
-    if (tableBody) tableBody.innerHTML = '';
+    const specializationChoices = Array.from(
+      new Set(Object.values(courseToSpecs).flat())
+    ).sort((a, b) => a.localeCompare(b));
+    const languageChoices = groupUniqueValues(courses, (course) => course.primaryLanguage || '');
 
-    function statsForCourse(courseId) {
-      if (!courseId || typeof courseId !== 'string') return null;
-      const variants = [courseId, courseId.replace(/\s+/g, '-'), courseId.replace(/\s+/g, '-').replace(/\//g, '-')];
-      for (const v of variants) {
-        if (statsData[v]) return statsData[v];
-      }
-      // try uppercase-dash variant
-      const up = courseId.toUpperCase().replace(/\s+/g, '-');
-      return statsData[up] || null;
+    const searchInput = document.getElementById('course-search');
+    const specializationFilter = document.getElementById('specialization-filter');
+    const languageFilter = document.getElementById('language-filter');
+    const foundationalFilter = document.getElementById('foundational-filter');
+    const sortFieldSelect = document.getElementById('sort-field');
+    const sortDirectionBtn = document.getElementById('sort-direction');
+
+    function buildSelectOptions(items, selectEl, placeholder) {
+      if (!selectEl) return;
+      selectEl.innerHTML =
+        `<option value="">${placeholder}</option>` +
+        items.map((item) => `<option value="${item}">${item}</option>`).join('');
     }
 
-    courses.forEach((course) => {
-      if (!course || typeof course !== 'object') return;
-      const courseId = course.courseId;
-      if (typeof courseId !== 'string' || !courseId) return;
+    buildSelectOptions(specializationChoices, specializationFilter, 'All specializations');
+    buildSelectOptions(languageChoices, languageFilter, 'All languages');
+    renderSpecializationSummary(mappingData, specializationsData);
 
-      const specsForCourse = courseToSpecs[courseId] || [];
-      const foundational = course.isFoundational === true;
-      const stats = statsForCourse(courseId);
-      const rating = formatRating(stats);
-      const difficulty = stats && typeof stats.avgDifficulty === 'number' ? stats.avgDifficulty.toFixed(2) : '—';
-      const workload = stats && typeof stats.avgWorkload === 'number' ? `${stats.avgWorkload.toFixed(1)}` : '—';
-      const language = (course.primaryLanguage && course.primaryLanguage) || '—';
+    function getSpecializationsForCourse(courseId) {
+      return courseToSpecs[courseId] || [];
+    }
 
-      const row = document.createElement('tr');
-      row.className = 'border-t border-black/10';
-      row.innerHTML = `
-        <td class="px-6 py-5 align-top text-sm font-semibold text-black">${courseId}</td>
-        <td class="px-6 py-5 align-top text-sm text-black/90">${course.name || '—'}</td>
-        <td class="px-6 py-5 align-top text-sm text-black/90">${createSpecializationPills(specsForCourse)}</td>
-        <td class="px-6 py-5 align-top text-sm text-black/90">${language}</td>
-        <td class="px-6 py-5 align-top text-sm font-medium text-black">${yesNoPill(foundational)}</td>
-        <td class="px-6 py-5 align-top text-sm font-medium text-black">${rating}</td>
-        <td class="px-6 py-5 align-top text-sm font-medium text-black">${difficulty}</td>
-        <td class="px-6 py-5 align-top text-sm font-medium text-black">${workload}</td>
-      `;
-      tableBody.appendChild(row);
+    function filterCourses() {
+      const search = normalizeText(filters.search);
+      const specialization = filters.specialization;
+      const language = filters.language;
+      const foundational = filters.foundational;
+
+      return courses.filter((course) => {
+        if (!course || typeof course !== 'object') return false;
+        const courseId = course.courseId || '';
+        const title = course.name || '';
+        const languageValue = course.primaryLanguage || '';
+        const specs = getSpecializationsForCourse(courseId);
+        const foundationalValue = course.isFoundational === true;
+
+        if (search) {
+          const haystack = `${courseId} ${title} ${languageValue} ${specs.join(' ')}`;
+          if (!normalizeText(haystack).includes(search)) return false;
+        }
+
+        if (specialization && !specs.includes(specialization)) return false;
+        if (language && languageValue !== language) return false;
+        if (foundational === 'yes' && !foundationalValue) return false;
+        if (foundational === 'no' && foundationalValue) return false;
+
+        return true;
+      });
+    }
+
+    function renderTable(filteredCourses) {
+      if (courseCount) courseCount.textContent = String(filteredCourses.length);
+      if (!tableBody) return;
+      tableBody.innerHTML = '';
+
+      if (filteredCourses.length === 0) {
+        tableBody.innerHTML =
+          '<tr><td colspan="5" class="px-6 py-12 text-center text-sm text-black/60">No courses match those filters.</td></tr>';
+        return;
+      }
+
+      filteredCourses.forEach((course) => {
+        const courseId = course.courseId || '';
+        const specsForCourse = getSpecializationsForCourse(courseId);
+        const foundational = course.isFoundational === true;
+        const language = course.primaryLanguage || '—';
+
+        const row = document.createElement('tr');
+        row.className = 'border-t border-black/10';
+        row.innerHTML = `
+          <td class="px-6 py-5 align-top text-sm font-semibold text-black">${courseId}</td>
+          <td class="px-6 py-5 align-top text-sm text-black/90">${course.name || '—'}</td>
+          <td class="px-6 py-5 align-top text-sm text-black/90">${createSpecializationPills(specsForCourse)}</td>
+          <td class="px-6 py-5 align-top text-sm text-black/90">${language}</td>
+          <td class="px-6 py-5 align-top text-sm font-medium text-black">${yesNoPill(foundational)}</td>
+        `;
+        tableBody.appendChild(row);
+      });
+    }
+
+    function updateTable() {
+      const filteredCourses = filterCourses();
+      const sortedCourses = sortCourses(
+        filteredCourses,
+        filters.sortField,
+        filters.sortDirection
+      );
+      renderTable(sortedCourses);
+    }
+
+    const updateFilters = () => {
+      filters.search = searchInput ? searchInput.value : '';
+      filters.specialization = specializationFilter ? specializationFilter.value : '';
+      filters.language = languageFilter ? languageFilter.value : '';
+      filters.foundational = foundationalFilter ? foundationalFilter.value : '';
+      filters.sortField = sortFieldSelect ? sortFieldSelect.value : 'courseId';
+    };
+
+    if (searchInput) searchInput.addEventListener('input', () => {
+      filters.search = searchInput.value;
+      updateTable();
     });
+    if (specializationFilter) specializationFilter.addEventListener('change', () => {
+      filters.specialization = specializationFilter.value;
+      updateTable();
+    });
+    if (languageFilter) languageFilter.addEventListener('change', () => {
+      filters.language = languageFilter.value;
+      updateTable();
+    });
+    if (sortFieldSelect) sortFieldSelect.addEventListener('change', () => {
+      filters.sortField = sortFieldSelect.value;
+      updateTable();
+    });
+    if (sortDirectionBtn) {
+      sortDirectionBtn.addEventListener('click', () => {
+        filters.sortDirection = filters.sortDirection === 'asc' ? 'desc' : 'asc';
+        sortDirectionBtn.textContent = filters.sortDirection === 'asc' ? '↑' : '↓';
+        updateTable();
+      });
+    }
+    if (foundationalFilter) {
+      foundationalFilter.addEventListener('change', () => {
+        filters.foundational = foundationalFilter.value;
+        updateTable();
+      });
+    }
+
+    updateTable();
   } catch (error) {
     console.error('Error loading courses:', error);
     const message = error instanceof Error ? error.message : String(error);

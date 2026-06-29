@@ -43,6 +43,53 @@
                         <span id="course-count">0</span>
                     </div>
                 </div>
+
+                <div class="mt-6 grid gap-3 md:grid-cols-2 lg:grid-cols-5">
+                    <label class="block">
+                        <span class="text-xs font-semibold uppercase tracking-[0.18em] text-black/60">Search</span>
+                        <input id="course-search" type="search" placeholder="Course or title" class="mt-2 w-full rounded-3xl border border-black/10 bg-white px-4 py-3 text-sm text-black outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/20" />
+                    </label>
+                    <label class="block">
+                        <span class="text-xs font-semibold uppercase tracking-[0.18em] text-black/60">Specialization</span>
+                        <select id="specialization-filter" class="mt-2 w-full rounded-3xl border border-black/10 bg-white px-4 py-3 text-sm text-black outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/20">
+                            <option value="">All specializations</option>
+                        </select>
+                    </label>
+                    <label class="block">
+                        <span class="text-xs font-semibold uppercase tracking-[0.18em] text-black/60">Language</span>
+                        <select id="language-filter" class="mt-2 w-full rounded-3xl border border-black/10 bg-white px-4 py-3 text-sm text-black outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/20">
+                            <option value="">All languages</option>
+                        </select>
+                    </label>
+                    <label class="block">
+                        <span class="text-xs font-semibold uppercase tracking-[0.18em] text-black/60">Foundational</span>
+                        <select id="foundational-filter" class="mt-2 w-full rounded-3xl border border-black/10 bg-white px-4 py-3 text-sm text-black outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/20">
+                            <option value="">All</option>
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                        </select>
+                    </label>
+                    <label class="block">
+                        <span class="text-xs font-semibold uppercase tracking-[0.18em] text-black/60">Sort</span>
+                        <div class="mt-2 flex gap-2">
+                            <select id="sort-field" class="flex-1 rounded-3xl border border-black/10 bg-white px-4 py-3 text-sm text-black outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/20">
+                                <option value="courseId">Course</option>
+                                <option value="name">Title</option>
+                                <option value="language">Language</option>
+                                <option value="specializations">Specializations</option>
+                            </select>
+                            <button id="sort-direction" type="button" class="inline-flex items-center justify-center rounded-3xl border border-black/10 bg-white px-4 py-3 text-sm text-black transition hover:bg-black/5">↑</button>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="px-6 py-6 border-t border-black/10 bg-white">
+                <div class="mb-6">
+                    <p class="text-xs uppercase tracking-[0.25em] text-black/60">Specialization details</p>
+                    <h3 class="mt-2 text-2xl font-semibold text-black">Specializations and required courses</h3>
+                </div>
+                <div id="specialization-summary" class="grid gap-4 lg:grid-cols-2"></div>
             </div>
 
             <div class="overflow-x-auto">
@@ -54,9 +101,6 @@
                             <th class="px-6 py-4">Specializations</th>
                             <th class="px-6 py-4">Language</th>
                             <th class="px-6 py-4">Foundational</th>
-                            <th class="px-6 py-4">Rating</th>
-                            <th class="px-6 py-4">Difficulty</th>
-                            <th class="px-6 py-4">Workload (hrs/wk)</th>
                         </tr>
                     </thead>
                     <tbody id="courses-table-body" class="bg-white">

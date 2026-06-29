@@ -73,43 +73,61 @@ function showError(message, details) {
     const baseDirUrl = normalizeBaseForData(document.baseURI || window.location.href);
     const coursesUrl = new URL('data/courses.json', baseDirUrl).toString();
     const specializationsUrl = new URL('data/specializations.json', baseDirUrl).toString();
+    const mappingUrl = new URL('data/mapping.json', baseDirUrl).toString();
     const statsUrl = new URL('data/course-stats.json', baseDirUrl).toString();
 
-    const [coursesRes, specsRes, statsRes] = await Promise.all([
+    const [coursesRes, specsRes, mappingRes, statsRes] = await Promise.all([
       fetch(coursesUrl),
       fetch(specializationsUrl),
+      fetch(mappingUrl),
       fetch(statsUrl)
     ]);
     if (!coursesRes.ok) throw new Error(`Unable to fetch courses.json (${coursesRes.status})`);
     if (!specsRes.ok) throw new Error(`Unable to fetch specializations.json (${specsRes.status})`);
+    if (!mappingRes.ok) throw new Error(`Unable to fetch mapping.json (${mappingRes.status})`);
     if (!statsRes.ok) throw new Error(`Unable to fetch course-stats.json (${statsRes.status})`);
 
-    const [coursesData, specializationsData, statsData] = await Promise.all([
+    const [coursesData, specializationsData, mappingData, statsData] = await Promise.all([
       coursesRes.json(),
       specsRes.json(),
+      mappingRes.json(),
       statsRes.json()
     ]);
 
     const courses = coursesData && typeof coursesData === 'object' ? Object.values(coursesData) : [];
     const courseStats = statsData && typeof statsData === 'object' ? statsData : {};
 
+    // Build course -> specialization mapping using mapping.json and specializations.json
     const courseToSpecs = {};
-    if (specializationsData && typeof specializationsData === 'object') {
-      Object.values(specializationsData).forEach((spec) => {
-        if (!spec || typeof spec !== 'object') return;
-        if (!spec.name) return;
+    if (mappingData && typeof mappingData === 'object') {
+      Object.keys(mappingData).forEach((specId) => {
+        const specMeta = mappingData[specId];
+        const specName = (specializationsData && specializationsData[specId] && specializationsData[specId].name) || `Spec ${specId}`;
 
-        const specName = spec.name;
-        const core = Array.isArray(spec.coreCourses)
-          ? spec.coreCourses.flatMap((g) => (g && Array.isArray(g.courseIds) ? g.courseIds : []))
-          : [];
-        const electives = Array.isArray(spec.electiveCourseIds) ? spec.electiveCourseIds : [];
+        const addCourses = (arr) => {
+          if (!Array.isArray(arr)) return;
+          arr.forEach((g) => {
+            if (!g) return;
+            // g may be an object with 'courses' or string entries
+            if (Array.isArray(g.courses)) {
+              g.courses.forEach((cid) => {
+                if (typeof cid !== 'string' || !cid) return;
+                if (!courseToSpecs[cid]) courseToSpecs[cid] = [];
+                if (!courseToSpecs[cid].includes(specName)) courseToSpecs[cid].push(specName);
+              });
+            } else if (typeof g === 'string') {
+              const cid = g;
+              if (!courseToSpecs[cid]) courseToSpecs[cid] = [];
+              if (!courseToSpecs[cid].includes(specName)) courseToSpecs[cid].push(specName);
+            }
+          });
+        };
 
-        [...core, ...electives].forEach((courseId) => {
-          if (typeof courseId !== 'string' || !courseId) return;
-          if (!courseToSpecs[courseId]) courseToSpecs[courseId] = [];
-          if (!courseToSpecs[courseId].includes(specName)) courseToSpecs[courseId].push(specName);
-        });
+        if (specMeta && typeof specMeta === 'object') {
+          if (Array.isArray(specMeta.core)) addCourses(specMeta.core);
+          if (Array.isArray(specMeta.electives)) addCourses(specMeta.electives);
+          if (Array.isArray(specMeta.electives || [])) addCourses(specMeta.electives);
+        }
       });
     }
 
@@ -124,6 +142,17 @@ function showError(message, details) {
     if (courseCount) courseCount.textContent = String(courses.length);
     if (tableBody) tableBody.innerHTML = '';
 
+    function statsForCourse(courseId) {
+      if (!courseId || typeof courseId !== 'string') return null;
+      const variants = [courseId, courseId.replace(/\s+/g, '-'), courseId.replace(/\s+/g, '-').replace(/\//g, '-')];
+      for (const v of variants) {
+        if (statsData[v]) return statsData[v];
+      }
+      // try uppercase-dash variant
+      const up = courseId.toUpperCase().replace(/\s+/g, '-');
+      return statsData[up] || null;
+    }
+
     courses.forEach((course) => {
       if (!course || typeof course !== 'object') return;
       const courseId = course.courseId;
@@ -131,7 +160,11 @@ function showError(message, details) {
 
       const specsForCourse = courseToSpecs[courseId] || [];
       const foundational = course.isFoundational === true;
-      const rating = formatRating(courseStats[courseId]);
+      const stats = statsForCourse(courseId);
+      const rating = formatRating(stats);
+      const difficulty = stats && typeof stats.avgDifficulty === 'number' ? stats.avgDifficulty.toFixed(2) : '—';
+      const workload = stats && typeof stats.avgWorkload === 'number' ? `${stats.avgWorkload.toFixed(1)}` : '—';
+      const language = (course.primaryLanguage && course.primaryLanguage) || '—';
 
       const row = document.createElement('tr');
       row.className = 'border-t border-black/10';
@@ -139,8 +172,11 @@ function showError(message, details) {
         <td class="px-6 py-5 align-top text-sm font-semibold text-black">${courseId}</td>
         <td class="px-6 py-5 align-top text-sm text-black/90">${course.name || '—'}</td>
         <td class="px-6 py-5 align-top text-sm text-black/90">${createSpecializationPills(specsForCourse)}</td>
+        <td class="px-6 py-5 align-top text-sm text-black/90">${language}</td>
         <td class="px-6 py-5 align-top text-sm font-medium text-black">${yesNoPill(foundational)}</td>
         <td class="px-6 py-5 align-top text-sm font-medium text-black">${rating}</td>
+        <td class="px-6 py-5 align-top text-sm font-medium text-black">${difficulty}</td>
+        <td class="px-6 py-5 align-top text-sm font-medium text-black">${workload}</td>
       `;
       tableBody.appendChild(row);
     });

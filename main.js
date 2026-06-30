@@ -571,10 +571,13 @@ function showError(message, details) {
           ? '<span class="inline-flex rounded-full border border-black/10 bg-bg-color px-3 py-1 text-xs font-semibold text-black">Assigned</span>'
           : `<button type="button" data-add-course="${courseId}" class="inline-flex rounded-full border border-black/10 bg-white px-4 py-2 text-xs font-semibold text-black transition hover:bg-black/5" ${canAdd ? '' : 'disabled'}>${canAdd ? 'Add' : 'Limit'}</button>`;
 
+        const courseLink = course.url
+          ? `<a href="${course.url}" target="_blank" rel="noopener noreferrer" class="text-accent hover:underline">${courseId}</a>`
+          : courseId;
         const row = document.createElement('tr');
         row.className = 'border-t border-black/10';
         row.innerHTML = `
-          <td class="px-6 py-5 align-top text-sm font-semibold text-black">${courseId}</td>
+          <td class="px-6 py-5 align-top text-sm font-semibold text-black">${courseLink}</td>
           <td class="px-6 py-5 align-top text-sm text-black/90">${course.name || '—'}</td>
           <td class="px-6 py-5 align-top text-sm text-black/90">${createSpecializationPills(specsForCourse)}</td>
           <td class="px-6 py-5 align-top text-sm text-black/90">${language}</td>

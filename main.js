@@ -130,6 +130,38 @@ function groupUniqueValues(courses, accessor) {
   return Array.from(values).sort((a, b) => a.localeCompare(b));
 }
 
+function formatSpecCredits(spec) {
+  if (!spec || typeof spec.totalCredits !== 'number') return null;
+  return `${spec.totalCredits} credits · ${spec.coreCredits ?? '—'} core + ${spec.electiveCredits ?? '—'} electives`;
+}
+
+function renderSpecializationCredits(specializationsData) {
+  const container = document.getElementById('specialization-credits');
+  if (!container || !specializationsData) return;
+
+  const entries = Object.keys(specializationsData)
+    .sort((a, b) => {
+      const nameA = (specializationsData[a] && specializationsData[a].name) || a;
+      const nameB = (specializationsData[b] && specializationsData[b].name) || b;
+      return nameA.localeCompare(nameB);
+    })
+    .map((specId) => {
+      const spec = specializationsData[specId] || {};
+      const credits = formatSpecCredits(spec);
+      return `
+        <div class="rounded-3xl border border-black/10 bg-white p-4">
+          <div class="text-sm font-semibold text-black">${spec.name || `Specialization ${specId}`}</div>
+          ${credits ? `<div class="mt-1 text-sm text-black/80">${credits}</div>` : '<div class="mt-1 text-sm text-black/50">—</div>'}
+        </div>
+      `;
+    })
+    .join('');
+
+  container.innerHTML = entries
+    ? `<div class="space-y-3">${entries}</div>`
+    : '<p class="text-sm text-black/60">No credit data available.</p>';
+}
+
 function renderSpecializationSummary(mappingData, specializationsData) {
   const container = document.getElementById('specialization-summary');
   if (!container) return;
@@ -142,6 +174,7 @@ function renderSpecializationSummary(mappingData, specializationsData) {
     .map((specId) => {
       const specMeta = mappingData[specId] || {};
       const specName = (specializationsData[specId] && specializationsData[specId].name) || `Specialization ${specId}`;
+      const specInfo = specializationsData[specId] || {};
       const coreGroups = Array.isArray(specMeta.core) ? specMeta.core : [];
       const electiveGroups = Array.isArray(specMeta.electives) ? specMeta.electives : [];
       const requiredCoreCount = coreGroups.reduce((sum, group) => {
@@ -149,12 +182,14 @@ function renderSpecializationSummary(mappingData, specializationsData) {
         return sum + (Number.isFinite(count) ? count : 0);
       }, 0);
       const requiredElectives = Number.isFinite(parseInt(specMeta.electives_count, 10)) ? parseInt(specMeta.electives_count, 10) : 0;
+      const creditsLine = formatSpecCredits(specInfo);
 
       return `
         <section class="rounded-[28px] border border-black/10 bg-bg-color p-6">
           <div class="mb-4 flex items-center justify-between gap-3">
             <div>
               <h4 class="text-xl font-semibold text-black">${specName}</h4>
+              ${creditsLine ? `<p class="mt-2 text-sm font-medium text-black">${creditsLine}</p>` : ''}
               <p class="mt-2 text-sm text-black/70">Core required: ${requiredCoreCount} · Electives required: ${requiredElectives}</p>
             </div>
           </div>
@@ -335,10 +370,11 @@ function showError(message, details) {
     initOverlapView({
       matrixEl: document.getElementById('overlap-matrix'),
       vennEl: document.getElementById('overlap-venn'),
-      selectEl: document.getElementById('overlap-spec-select'),
+      pickerEl: document.getElementById('overlap-spec-select'),
       specSets
     });
     renderSpecializationSummary(mappingData, specializationsData);
+    renderSpecializationCredits(specializationsData);
 
     const planner = {
       semesters: [
@@ -353,6 +389,40 @@ function showError(message, details) {
     const plannerProgress = document.getElementById('planner-progress');
     const semesterList = document.getElementById('semester-list');
     const addSemesterButton = document.getElementById('add-semester-btn');
+    const activeSemesterLabel = document.getElementById('active-semester-label');
+
+    function selectSemester(semesterId) {
+      if (!planner.semesters.some((sem) => sem.id === semesterId)) return;
+      planner.selectedSemesterId = semesterId;
+      renderSemesterPlanner();
+      updateTable();
+    }
+
+    function bindSemesterListEvents() {
+      if (!semesterList || semesterList.dataset.bound === 'true') return;
+      semesterList.dataset.bound = 'true';
+
+      semesterList.addEventListener('click', (event) => {
+        const removeBtn = event.target.closest('[data-remove-semester-id]');
+        if (removeBtn) {
+          event.stopPropagation();
+          const semesterId = Number(removeBtn.getAttribute('data-remove-semester-id'));
+          const courseId = removeBtn.getAttribute('data-course-id');
+          const semester = planner.semesters.find((sem) => sem.id === semesterId);
+          if (!semester || !courseId) return;
+          semester.courses = semester.courses.filter((id) => id !== courseId);
+          renderSemesterPlanner();
+          updateTable();
+          return;
+        }
+
+        const card = event.target.closest('[data-semester-id]');
+        if (!card) return;
+        const semesterId = Number(card.getAttribute('data-semester-id'));
+        if (!Number.isFinite(semesterId)) return;
+        selectSemester(semesterId);
+      });
+    }
 
     function getCourseById(courseId) {
       return courses.find((course) => course.courseId === courseId);
@@ -455,12 +525,13 @@ function showError(message, details) {
             return count + (course && course.isFoundational ? 1 : 0);
           }, 0);
           return `
-            <section class="rounded-[28px] border ${isSelected ? 'border-accent bg-accent/5' : 'border-black/10 bg-bg-color'} p-6">
+            <section data-semester-id="${semester.id}" class="cursor-pointer rounded-[28px] border ${isSelected ? 'border-accent bg-accent/5 ring-2 ring-accent/20' : 'border-black/10 bg-bg-color'} p-6 transition hover:border-accent/40">
               <div class="mb-3 flex items-center justify-between gap-3">
-                <button type="button" data-semester-id="${semester.id}" class="semester-select inline-flex items-center gap-2 text-left text-xl font-semibold text-black">
+                <div class="inline-flex items-center gap-2 text-left text-xl font-semibold text-black">
                   ${semester.name}
                   <span class="rounded-full bg-white px-3 py-1 text-xs font-semibold text-black/70">${semester.courses.length} courses</span>
-                </button>
+                  ${isSelected ? '<span class="rounded-full bg-accent px-3 py-1 text-xs font-semibold text-white">Active</span>' : ''}
+                </div>
                 <div class="text-xs text-black/60">Foundational: ${foundationalCount}</div>
               </div>
               <div class="mb-4 flex flex-wrap gap-2">${createCoursePills(semester.courses)}</div>
@@ -478,9 +549,16 @@ function showError(message, details) {
         })
         .join('');
 
+      if (activeSemesterLabel) {
+        const active = getSelectedSemester();
+        activeSemesterLabel.innerHTML = `
+          <span class="inline-flex h-2 w-2 rounded-full bg-accent"></span>
+          <span>Adding courses to: ${active ? active.name : '—'}</span>
+        `;
+      }
+
       updatePlannerStatus();
       renderPlannerSummary();
-      attachSemesterEvents();
     }
 
     function updatePlannerStatus() {
@@ -496,28 +574,6 @@ function showError(message, details) {
           plannerWarning.textContent = '';
         }
       }
-    }
-
-    function attachSemesterEvents() {
-      document.querySelectorAll('[data-semester-id]').forEach((button) => {
-        button.addEventListener('click', () => {
-          const semesterId = Number(button.getAttribute('data-semester-id'));
-          planner.selectedSemesterId = semesterId;
-          renderSemesterPlanner();
-          updateTable();
-        });
-      });
-      document.querySelectorAll('[data-remove-semester-id]').forEach((button) => {
-        button.addEventListener('click', () => {
-          const semesterId = Number(button.getAttribute('data-remove-semester-id'));
-          const courseId = button.getAttribute('data-course-id');
-          const semester = planner.semesters.find((sem) => sem.id === semesterId);
-          if (!semester) return;
-          semester.courses = semester.courses.filter((id) => id !== courseId);
-          renderSemesterPlanner();
-          updateTable();
-        });
-      });
     }
 
     function canAddCourse(courseId) {
@@ -536,9 +592,10 @@ function showError(message, details) {
     function addSemester() {
       const nextId = planner.semesters.length > 0 ? Math.max(...planner.semesters.map((s) => s.id)) + 1 : 1;
       planner.semesters.push({ id: nextId, name: `Semester ${planner.semesters.length + 1}`, courses: [] });
-      planner.selectedSemesterId = nextId;
-      renderSemesterPlanner();
+      selectSemester(nextId);
     }
+
+    bindSemesterListEvents();
 
     if (addSemesterButton) {
       addSemesterButton.addEventListener('click', () => {

@@ -227,27 +227,41 @@ export function renderVennDiagram(container, selectedSpecIds, specSets) {
   renderVennThree(container, selected.slice(0, 3));
 }
 
-export function initOverlapView({ matrixEl, vennEl, selectEl, specSets }) {
-  if (selectEl) {
-    selectEl.innerHTML = specSets
-      .map((spec) => `<option value="${spec.specId}">${spec.name} (${spec.courses.size} courses)</option>`)
+export function initOverlapView({ matrixEl, vennEl, pickerEl, specSets }) {
+  if (pickerEl) {
+    pickerEl.innerHTML = specSets
+      .map(
+        (spec) => `
+          <label class="flex cursor-pointer items-center gap-3 px-4 py-2.5 transition hover:bg-bg-color">
+            <input type="checkbox" value="${spec.specId}" class="overlap-spec-cb h-4 w-4 rounded border-black/20 text-accent focus:ring-accent/30" />
+            <span class="flex-1 text-sm text-black">${spec.name}</span>
+            <span class="text-xs text-black/50">${spec.courses.size} courses</span>
+          </label>
+        `
+      )
       .join('');
   }
 
   renderPairwiseMatrix(matrixEl, specSets);
 
-  const updateVenn = () => {
-    const selected = selectEl
-      ? [...selectEl.selectedOptions].map((opt) => opt.value).slice(0, 3)
+  const getSelected = () =>
+    pickerEl
+      ? [...pickerEl.querySelectorAll('.overlap-spec-cb:checked')].map((cb) => cb.value).slice(0, 3)
       : [];
-    renderVennDiagram(vennEl, selected, specSets);
+
+  const updateVenn = () => {
+    renderVennDiagram(vennEl, getSelected(), specSets);
   };
 
-  if (selectEl) {
-    selectEl.addEventListener('change', () => {
-      if (selectEl.selectedOptions.length > 3) {
-        const last = selectEl.selectedOptions[selectEl.selectedOptions.length - 1];
-        last.selected = false;
+  if (pickerEl) {
+    pickerEl.addEventListener('change', (event) => {
+      const checkbox = event.target;
+      if (!checkbox.matches('.overlap-spec-cb')) return;
+
+      const checked = pickerEl.querySelectorAll('.overlap-spec-cb:checked');
+      if (checked.length > 3) {
+        checkbox.checked = false;
+        return;
       }
       updateVenn();
     });

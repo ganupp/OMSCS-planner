@@ -1,26 +1,44 @@
 {
   "1": {
     "specializationId": "1",
-    "name": "Artificial Intelligence"
+    "name": "Artificial Intelligence",
+    "totalCredits": 15,
+    "coreCredits": 6,
+    "electiveCredits": 9
   },
   "2": {
     "specializationId": "2",
-    "name": "Computational Perception and Robotics"
+    "name": "Computational Perception and Robotics",
+    "totalCredits": 15,
+    "coreCredits": 6,
+    "electiveCredits": 9
   },
   "3": {
     "specializationId": "3",
-    "name": "Computer Graphics"
-  }, 
+    "name": "Computer Graphics",
+    "totalCredits": 15,
+    "coreCredits": 6,
+    "electiveCredits": 9
+  },
   "4": {
     "specializationId": "4",
-    "name": "Computing Systems"
-  }, 
+    "name": "Computing Systems",
+    "totalCredits": 18,
+    "coreCredits": 9,
+    "electiveCredits": 9
+  },
   "5": {
     "specializationId": "5",
-    "name": "Human Computer Interaction"
+    "name": "Human Computer Interaction",
+    "totalCredits": 15,
+    "coreCredits": 6,
+    "electiveCredits": 9
   },
   "6": {
     "specializationId": "6",
-    "name": "Machine Learning"
+    "name": "Machine Learning",
+    "totalCredits": 15,
+    "coreCredits": 6,
+    "electiveCredits": 9
   }
 }

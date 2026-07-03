@@ -1,6 +1,32 @@
+import { buildSpecCourseSets, initOverlapView } from './overlap.js';
+
 const courseCount = document.getElementById('course-count');
 const tableBody = document.getElementById('courses-table-body');
 const errorElement = document.getElementById('courses-error');
+
+function initTabs() {
+  const buttons = document.querySelectorAll('.tab-btn');
+  const panels = {
+    courses: document.getElementById('tab-courses'),
+    specializations: document.getElementById('tab-specializations')
+  };
+
+  buttons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const tab = btn.getAttribute('data-tab');
+      buttons.forEach((b) => {
+        const active = b.getAttribute('data-tab') === tab;
+        b.classList.toggle('border-accent', active);
+        b.classList.toggle('text-black', active);
+        b.classList.toggle('border-transparent', !active);
+        b.classList.toggle('text-black/60', !active);
+      });
+      Object.entries(panels).forEach(([key, panel]) => {
+        if (panel) panel.classList.toggle('hidden', key !== tab);
+      });
+    });
+  });
+}
 
 function createSpecializationPills(specs) {
   if (!specs || specs.length === 0) {
@@ -303,6 +329,15 @@ function showError(message, details) {
 
     buildSelectOptions(specializationChoices, specializationFilter, 'All specializations');
     buildSelectOptions(languageChoices, languageFilter, 'All languages');
+
+    initTabs();
+    const specSets = buildSpecCourseSets(mappingData, specializationsData);
+    initOverlapView({
+      matrixEl: document.getElementById('overlap-matrix'),
+      vennEl: document.getElementById('overlap-venn'),
+      selectEl: document.getElementById('overlap-spec-select'),
+      specSets
+    });
     renderSpecializationSummary(mappingData, specializationsData);
 
     const planner = {
